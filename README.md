@@ -20,3 +20,27 @@
 - 가위바위보
 - 업/다운 게임
 - 공룡 게임
+
+# 프로그램, 함수 설명
+## header.h
+- 필요한 헤더 파일들 미리 선언함.
+- define으로 상수 설정하면 반영 안됨.
+- 함수 선언하면 빌드시 여러 곳에서 정의되었다고 오류남.
+
+## main.c - int main() 
+- main함수. 게임 시작 시 메뉴 출력함.
+- gotoxy()함수 정의되어 있음.
+
+## main.c - void gotoxy(int x, int y)
+- x, y로 커서를 옮겨주는 함수
+- main함수에 선언되어 있음.
+- printMap함수에서 extern으로 참조함.
+
+## flag.c - void flag.c(int level)
+- 깃발, 장애물, 보물, 교수(추가예정) 위치를 map(전역변수)에 만들고 종료함.
+
+## printMap.c - void printMap()
+- 사각형 틀, map에 있는 깃발, 장애물, 교수(추가예정)를 위치에 맞게 출력함.
+
+## move.c -> int main()
+- 위에 있는 flag(), printMap()등을 다 합쳐서 출력된 맵 위에서 사용자가 움직일 수 있게 함.

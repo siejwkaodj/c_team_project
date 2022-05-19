@@ -1,7 +1,6 @@
 #include "header.h"
-// flag.c -> 플레이어, 장애물, 깃발 생성하는 함수
-#define HOR 80
-// 전역변수
+// flag.c -> 플레이어, 장애물, 깃발 위치 생성하는 함수
+// 외부 전역변수들
 extern size;
 extern map[50][50];
 
@@ -26,10 +25,10 @@ void flag(int level) {
 		num = 20;
 		break;
 	}
-	// 장애물 생성
+	// 장애물 생성	-> 범위는 0~49 까지
 	while (wallNum > 0) {
-		x1 = rand() % (size - 2) + 1;
-		y1 = rand() % (size - 2) + 1;
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
 		if (map[y1][x1] == 0) {
 			map[y1][x1] = 2;                // 장애물 - 2로 표시
 			wallNum--;
@@ -37,8 +36,8 @@ void flag(int level) {
 	}
 	// 깃발 생성 
 	while (num > 1) {                       // 한 개는 보물 생성해야함 -> 뒤에서 while문 돌려줌, 이미 있는 곳에 생기면 안 되서 while로 돌려줌.
-		x1 = rand() % (size - 2) + 1;
-		y1 = rand() % (size - 2) + 1;
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
 		if (map[y1][x1] == 0) {
 			map[y1][x1] = 4;                // 깃발 - 4로 표시
 			num--;
@@ -46,14 +45,12 @@ void flag(int level) {
 	}
 	// 보물 생성
 	while (num > 0) {
-		x1 = rand() % (size - 2) + 1;
-		y1 = rand() % (size - 2) + 1;
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
 		if (map[y1][x1] == 0) {
 			map[y1][x1] = 5;                // 보물 - 5로 표시
 			num--;
 		}
 	}
-
-
 	return;
 }

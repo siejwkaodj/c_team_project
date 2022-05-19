@@ -6,13 +6,5 @@
 #include <windows.h>
 #include <conio.h>
 #include <time.h>
-#define HOR 80
 
-// 함수들 여기서 미리 선언하면 main 윗부분에서 선언 안 해도 됨.
-void flag(int level);		// level은 난이도 변수
-void printSquare();
-void gotoxy(int x, int y);
-void printMap();
-void printCoord();
-
-int move();
+// 함수 여기서 생성하지 말 것. 정의 여러곳에 있다고 오류남.

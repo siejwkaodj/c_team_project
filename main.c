@@ -126,6 +126,8 @@ int main(void) {
 			if (ch == 224) {		// 방향키 이동 부분
 				ch = _getch();
 				switch (ch) {
+				
+				// 판정 함수 추가 부분
 				case 72:
 					if (y > min_y)		//x=0, 70, y = 0, 70부분이 경계이므로 그부분만 안닿게 설정
 						y--;

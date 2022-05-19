@@ -117,6 +117,7 @@ int main(void) {
 		// 게임 실행 부분, 실행하려면 나머지부분 주석처리하고 실행
 		/*
 		flag(1);
+		system("cls");
 		printMap();
 		while (1) {
 			gotoxy(x, y);

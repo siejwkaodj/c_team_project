@@ -42,7 +42,7 @@ int main(void) {
 
 
 	text_align_center(HOR, "다소 민감한 내용이 포함되어 있으니 대학생 이상은 플레이에 조심하세요.");
-	//텍스트 클리어
+	system("cls")
 
 
 
@@ -75,7 +75,7 @@ int main(void) {
 
 		while (player_select_1 < 1 || player_select_1 > 5) {
 			text_align_center(HOR, "\n\n다시 입력해주세요.");
-			//텍스트 클리어
+			system("cls")
 			text_align_center(HOR, "\n\n\n\n\n\n\n1. 게임설명\n\n");
 			text_align_center(HOR, "2. 난이도 선택\n\n");
 			text_align_center(HOR, "3. 캐릭터 선택\n\n");

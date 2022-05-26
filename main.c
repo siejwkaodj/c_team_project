@@ -21,7 +21,8 @@ const int min_y = 2;
 int main(void) {
 	int x = 40, y = 12, ch;	// 플레이어 위치
 	char player_name[] = {0};
-	
+	//cols 가로길이 lines 세로길이  값 넣어줘야함
+	system("mode con cols= lines=")
 	//GAME START 혹은 게임이름으로 변경 필요
 	text_align_center(HOR, " #####      ##    ##   ##  #######                #####    ##  ##  #######   ######  \n");
 	text_align_center(HOR, "##   ##    ####   ### ###   ##  ##               ##   ##   ##  ##   ##  ##   ##  ##  \n");
@@ -31,7 +32,6 @@ int main(void) {
 	text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##           ##  ##   ##    ####    ##  ##   ## ##   \n");
 	text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####      ##    #######   ###  ## \n");
 
-	text_align_center(HOR, "PRESS ALT ENTER");
 	char letter;
 	letter = _getch();
 

@@ -1,12 +1,13 @@
 #include "header.h"
-void gotoxy(int x, int y);
+extern gotoxy(int x, int y);
+extern size;
+extern map[50][50];
 
 void printMap() {
 	extern max_x;
 	extern min_x;
 	extern max_y;
 	extern min_y;
-	extern map[50][50];
 	extern size;
 	//char ch = '■';		// 변수에 저장하고 출력하면 이상하게 나옴
 
@@ -70,5 +71,87 @@ void printMap() {
 	}
 	gotoxy(102, 52);
 	printf("\n\n");
+	return;
+}
+
+void printSquare(int x1, int y1, int x2, int y2) {
+	// x1 < x2, y1 < y2라고 가정.
+	// 두 점을 잡고, 그 점을 이은 사각형을 그리는 함수. 왼쪽 위와 오른쪽 아래의 두 점이 필요.
+	int px = x1, py = y1;
+
+	while (px <= x2) {
+		gotoxy(px, y1);
+		printf("─");
+		gotoxy(px, y2);
+		printf("─");
+		px++;
+	}
+	while (py <= y2) {
+		gotoxy(x1, py);
+		printf("│");
+		gotoxy(x2, py);
+		printf("│");
+		py++;
+	}
+	gotoxy(x1, y1);
+	printf("┌");
+	gotoxy(x1, y2);
+	printf("└");
+	gotoxy(x2, y1);
+	printf("┐");
+	gotoxy(x2, y2);
+	printf("┘");
+	
+	return;
+}
+
+// 플레이어 위치, 장애물, 깃발 생성 함수
+void flag(int level) {
+	srand((unsigned)time(NULL));
+	int x1, y1;         // 좌표 임시 변수
+	int wallNum = 0;    // 장애물 개수 지정
+	int num = 0;        // 깃발 개수 세는것
+	// 장애물 생성
+	switch (level) {
+	case 1:
+		wallNum = 10;       // 장애물 개수
+		num = 10;           // 깃발 개수
+		break;
+	case 2:
+		wallNum = 20;
+		num = 15;
+		break;
+	case 3:
+		wallNum = 25;
+		num = 20;
+		break;
+	}
+	// 장애물 생성	-> 범위는 0~49 까지
+	while (wallNum > 0) {
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
+		if (map[y1][x1] == 0) {
+			map[y1][x1] = 2;                // 장애물 - 2로 표시
+			wallNum--;
+		}
+	}
+	// 깃발 생성 
+	while (num > 1) {                       // 한 개는 보물 생성해야함 -> 뒤에서 while문 돌려줌, 이미 있는 곳에 생기면 안 되서 while로 돌려줌.
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
+		if (map[y1][x1] == 0) {
+			map[y1][x1] = 4;                // 깃발 - 4로 표시
+			num--;
+		}
+	}
+	// 보물 생성
+	while (num > 0) {
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
+		if (map[y1][x1] == 0) {
+			map[y1][x1] = 5;                // 보물 - 5로 표시
+			num--;
+		}
+	}
 	return;
 }

@@ -1,5 +1,5 @@
 //main 함수
-#define _CRT_SECURE_NO_WARNINGS
+// #define _CRT_SECURE_NO_WARNINGS
 #include "header.h"
 #define HOR 190	// define으로 정의해 주는것은 파일 안에서 해줘야 오류가 안 남
 

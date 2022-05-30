@@ -1,42 +1,44 @@
-void detect() {
-	if (map[x][y] == "¢Ì")
+extern map[50][50];
+
+int detect(int x, int y) {
+	if (map[x][y] == "â–©")
 		return 0;
-	else if (map[x][y] == "¡İ")
+	else if (map[x][y] == "â—")
 		return 1;
-	else if (map[x][y] == "¢º")
+	else if (map[x][y] == "â–¶")
 		return 2;
 	else
 		return 3;
 }
-// Àå¾Ö¹° = 0 / ±³¼ö = 1 / ±ê¹ß ¹× º¸¹° = 2 / ¾Æ¹«°Íµµ ¾ø´ÂÄ­ = 3
-void detection(int x,int y) {
+// ì¥ì• ë¬¼ = 0 / êµìˆ˜ = 1 / ê¹ƒë°œ ë° ë³´ë¬¼ = 2 / ì•„ë¬´ê²ƒë„ ì—†ëŠ”ì¹¸ = 3
+void detection(int x,int y, int ch) {
 	
-	switch (_getch())
+	switch (ch)
 	{
 	case 72:
 		
 			y--;
-			detect();
+			detect(x, y);
 			y++;
 		break;
 	case 80:
 			
 			y++;
-			detect();
+			detect(x, y);
 			y--;
 		break;
 	case 75:
 	
 			x -= 2;
-			detect();
+			detect(x, y);
 			x += 2;
 		break;
 	case 77:
 	
 			x += 2;
-			detect();
+			detect(x, y);
 			x += 2;
 		break;
 	}
 }
-	// ÀÌµ¿ÇÒ Ä­¿¡ ¹«¾ùÀÌ ÀÖ´ÂÁö ÆÇÁ¤ÈÄ ÁÂÇ¥¸¦ ´Ù½Ã Á¦ÀÚ¸®·Î ÀÌµ¿ÇÔ.
+	// ì´ë™í•  ì¹¸ì— ë¬´ì—‡ì´ ìˆëŠ”ì§€ íŒì •í›„ ì¢Œí‘œë¥¼ ë‹¤ì‹œ ì œìë¦¬ë¡œ ì´ë™í•¨.

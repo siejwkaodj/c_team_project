@@ -1,6 +1,7 @@
 #include "header.h"
-// flag.c -> 플레이어, 장애물, 깃발 위치 생성하는 함수
-// 외부 전역변수들
+// flag.c -> 플레이어, 장애물, 깃발 생성하는 함수
+
+// 전역변수
 extern size;
 extern map[50][50];
 

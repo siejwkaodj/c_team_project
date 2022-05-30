@@ -1,4 +1,3 @@
-// 사각형, 장애물, 깃발 출력하는 함수.
 #include "header.h"
 void gotoxy(int x, int y);
 

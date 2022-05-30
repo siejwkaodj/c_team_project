@@ -21,6 +21,7 @@ const int min_y = 2;
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
 	int x = 40, y = 12, ch;	// 플레이어 위치
+	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 	char player_name[] = {0};
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
@@ -43,7 +44,16 @@ int main(void) {
 
 
 
-	text_align_center(HOR, "다소 민감한 내용이 포함되어 있으니 대학생 이상은 플레이에 조심하세요.");
+	text_align_center(HOR, "[ 다소 민감한 내용이 포함되어 있으니 학부생 및 대학원생은 플레이에 조심하세요. ]\n");
+	for (int i = 0; i < 3; i++) {
+		gotoxy(0, 20);
+		text_align_center(HOR, "                    ");	// 이전 글자 지워주는 부분
+		gotoxy(0, 20);
+		text_align_center(HOR, "starting in");
+		gotoxy(HOR/2 + 12/2, 20);	// starting in 글자길이 대충 12로 계산.
+		printf("%d...", 3 - i);
+		Sleep(1 * 1000);
+	}
 	system("cls");	// 주석추가
 
 
@@ -61,14 +71,6 @@ int main(void) {
 
 
 
-
-
-
-
-
-
-
-
 	while (1) {
 		int player_select_1, player_select_2;
 		// printf("\n\n\n\n\n\n\n");	// 밑에 엔터키 앞부분만 지워줄 것.
@@ -80,6 +82,7 @@ int main(void) {
 		// gotoxy(HOR/2, 38);
 		scanf("%d", &player_select_1);
 
+		// 플레이어 메뉴 선택 입력 잘못되었을때 다시 받는 부분
 		while (player_select_1 < 1 || player_select_1 > 5) {
 			system("cls");	// clear screen후 문자출력해야지 안그러면 다 지워진 후에 출력함.
 			text_align_center(HOR, "\n\n다시 입력해주세요.");
@@ -96,9 +99,9 @@ int main(void) {
 
 		}
 		
-		
+		// 메뉴 선택별 케이스.
 		switch (player_select_1) {
-		case 1:
+		case 1:	// 게임 설명
 			text_align_center(HOR, "게임 설명\n");	// 이름 오류 수정
 			//게임 설명 추가 요망
 			text_align_center(HOR, "\n\n뒤로 가기 - ESC");
@@ -107,10 +110,35 @@ int main(void) {
 				player_select_2 = _getch();
 			}
 			break;
+		case 2:	// 난이도 선택
+			system("cls");
+			gotoxy(0, 10);	// y좌표 이동시 사용
+			text_align_center(HOR, "난이도를 선택해주세요 (1 - 초급, 2 - 중급, 3 - 고급) : \n");
+			gotoxy(HOR/2, 12);
+			scanf(" %d", &level);
 
 
-		case 2:
+			switch(level){
+			case 1:
+				text_align_center(HOR, "[ 초급 ] 난이도를 선택하셨습니다.\n");
+				break;
+			case 2:
+				text_align_center(HOR, "[ 중급 ] 난이도를 선택하셨습니다.");
+				break;
+			case 3:
+				text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
+				break;
+			default:
+				text_align_center(HOR, "잘못 입력하셨습니다.");
+				text_align_center(HOR, "다시 입력해주세요 : ");
+				scanf(" %d", &level);
 
+			}
+			text_align_center(HOR, "계속 진행하시겠습니까? (y / n)\n");
+			ch = _getch();
+			if(ch =='n')
+				continue;
+			
 		case 3:
 
 		case 4:
@@ -120,41 +148,42 @@ int main(void) {
 		// 오류나서 일단 default문 추가
 		default:
 		break;
-		
-		
-		
 		}
+
+
 		// 게임 실행 부분, 실행하려면 나머지부분 주석처리하고 실행
 		/*
-		flag(1);
-		system("cls");
-		printMap();
-		while (1) {
-			gotoxy(x, y);
-			printf("▷\b\b");			// 주인공 문자 출력 부분
-			ch = _getch();
-			printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
-			if (ch == 224) {		// 방향키 이동 부분
+		if(player_select_1 == 2){	// 난이도 선택 이후에만 게임 실행
+			flag(level);
+			system("cls");
+			printMap();
+			while (1) {
+				gotoxy(x, y);
+				printf("▷\b\b");			// 주인공 문자 출력 부분
 				ch = _getch();
-				switch (ch) {
-				
-				// 판정 함수 추가 부분
-				case 72:
-					if (y > min_y)		//x=0, 70, y = 0, 70부분이 경계이므로 그부분만 안닿게 설정
-						y--;
-					break;
-				case 80:
-					if (y < max_y)
-						y++;
-					break;
-				case 75:
-					if (x > min_x)
-						x -= 2;
-					break;
-				case 77:
-					if (x < max_x)
-						x += 2;
-					break;
+				printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
+				if (ch == 224) {		// 방향키 이동 부분
+					ch = _getch();
+					switch (ch) {
+					
+					// 판정 함수 추가 부분
+					case 72:
+						if (y > min_y)		//x=0, 70, y = 0, 70부분이 경계이므로 그부분만 안닿게 설정
+							y--;
+						break;
+					case 80:
+						if (y < max_y)
+							y++;
+						break;
+					case 75:
+						if (x > min_x)
+							x -= 2;
+						break;
+					case 77:
+						if (x < max_x)
+							x += 2;
+						break;
+					}
 				}
 			}
 		}

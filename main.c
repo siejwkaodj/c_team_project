@@ -6,11 +6,11 @@ void text_align_center(int columns, char* text);
 void gotoxy(int x, int y);
 
 // 외부정의 함수
-void printMap();							// 맵 출력하는 함수
-void flag(int level);						// 맵에 랜덤으로 깃발, 장애물 등을 배치하는 함수. 난이도 받아서 장애물 개수 등 설정.
-extern move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 위치를 움직임. detection 사용됨.
-extern detection(int, int, int);			// x, y, ch 인자를 전달, 사용자의 다음 움직임이 어디로 움직일지를 판단.
-extern printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
+extern void printMap();							// 맵 출력하는 함수
+extern void flag(int level);						// 맵에 랜덤으로 깃발, 장애물 등을 배치하는 함수. 난이도 받아서 장애물 개수 등 설정.
+extern int move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 위치를 움직임. detection 사용됨.
+extern int detection(int, int, int);			// x, y, ch 인자를 전달, 사용자의 다음 움직임이 어디로 움직일지를 판단.
+extern void printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
 
 // 전역변수
 int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
@@ -164,12 +164,13 @@ int main(void) {
 				system("cls");
 				continue;
 			}
+			break;
 		case 3:	// 플레이어 선택
-
+			break;
 		case 4:	// 개발자 모드
-
+			break;
 		case 5:	// 
-
+			break;
 		case 6:
 			game_start = 0;
 			break;

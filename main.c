@@ -82,7 +82,7 @@ int main(void) {
 	scanf("%s", player_name);
 
 
-
+	// 메뉴 시작
 	while (1) {
 		int player_select_1, player_select_2;
 		system("cls");

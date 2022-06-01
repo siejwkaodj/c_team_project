@@ -5,6 +5,11 @@
       "taskLabel": "task-main",
       "appliesTo": "main.c",
       "type": "launch"
+    },
+    {
+      "taskLabel": "task-main",
+      "appliesTo": "main.c",
+      "type": "launch"
     }
   ]
 }

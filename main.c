@@ -27,6 +27,8 @@ int main(void) {
 	
 	time_t tm1, tm2; // 게임 시간 받는 변수
 	
+	int rank[6];
+	
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
 	system("mode con cols=190 lines=60");	// cols= 190하면 오류남. 꼭 등호 뒤에 붙여서 하기.

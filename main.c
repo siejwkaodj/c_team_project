@@ -1,6 +1,5 @@
 ﻿//main 함수
 #include "header.h"
-#define HOR 190	// define으로 정의해 주는것은 파일 안에서 해줘야 오류가 안 남
 
 // 내부정의 함수
 void text_align_center(int columns, char* text);
@@ -15,6 +14,7 @@ extern printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두
 
 // 전역변수
 int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
+const int HOR = 190;
 const int size = 50;	// 맵 크기 설정
 const int max_x = 100;	// 플레이어 x, y 이동 범위 최대, 최소값
 const int min_x = 2;

@@ -1,6 +1,6 @@
 #include "header.h"
 
-
+extern HOR;
 
 void rank(int rank[], char player_name[]) {
 	text_align_center(HOR, "졸업기록 열람\n\n\n");

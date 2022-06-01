@@ -1,4 +1,4 @@
-// 0512 완성본 -> flag.c, main.c, header.h
+﻿// 0512 완성본 -> flag.c, main.c, header.h
 // header.h -> 새로 함수 몇개 정의함.
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>

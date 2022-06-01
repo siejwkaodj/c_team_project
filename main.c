@@ -1,15 +1,17 @@
-//main 함수
-// #define _CRT_SECURE_NO_WARNINGS
+﻿//main 함수
 #include "header.h"
 #define HOR 190	// define으로 정의해 주는것은 파일 안에서 해줘야 오류가 안 남
 
+// 내부정의 함수
 void text_align_center(int columns, char* text);
 void gotoxy(int x, int y);
 
 // 외부정의 함수
-void printMap();
-void flag(int level);
-extern printSquare(int, int, int, int);
+void printMap();							// 맵 출력하는 함수
+void flag(int level);						// 맵에 랜덤으로 깃발, 장애물 등을 배치하는 함수. 난이도 받아서 장애물 개수 등 설정.
+extern move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 위치를 움직임. detection 사용됨.
+extern detection(int, int, int);			// x, y, ch 인자를 전달, 사용자의 다음 움직임이 어디로 움직일지를 판단.
+extern printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
 
 // 전역변수
 int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
@@ -17,15 +19,17 @@ const int size = 50;	// 맵 크기 설정
 const int max_x = 100;	// 플레이어 x, y 이동 범위 최대, 최소값
 const int min_x = 2;
 const int max_y = 51;
-const int min_y = 2;
+const int min_y = 3;
 
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
 	int x = 40, y = 12, ch;	// 플레이어 위치
-	int tx, ty;				// 플레이어 이동 임시 x, y좌표
 	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
-	int game_start = 1;		// 게임 끝났는지 확인해주는 변수
-	char player_name[] = { 0 };
+	int game_start = 1;
+	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
+	
+	char player_name[1000];		// { 0 }으로 저장하면 크기 1됨.
+	char text[1000];		// 문장 출력할때 임시저장하는 변수
 	
 	time_t tm1, tm2; // 게임 시간 받는 변수
 	
@@ -83,17 +87,19 @@ int main(void) {
 
 
 	// 메뉴 시작
-	while (1) {
+	while (game_start) {
 		int player_select_1, player_select_2;
+		main_game_start = 1;
 		system("cls");
-		gotoxy(0, 7);
-		printSquare(80, 10, 110, 35);
+		
 		gotoxy(0, 12);
 		text_align_center(HOR, "1. 게임설명\n\n");
 		text_align_center(HOR, "2. 난이도 선택\n\n");
 		text_align_center(HOR, "3. 캐릭터 선택\n\n");
 		text_align_center(HOR, "4. 개발자 모드\n\n");
 		text_align_center(HOR, "5. 졸업기록 열람\n\n");
+		text_align_center(HOR, "6. 게임 종료\n\n");
+		printSquare(80, 10, 110, 35);
 		gotoxy(HOR/2, 30);
 		scanf("%d", &player_select_1);
 
@@ -107,7 +113,8 @@ int main(void) {
 			text_align_center(HOR, "3. 캐릭터 선택\n\n");
 			text_align_center(HOR, "4. 개발자 모드\n\n");
 			text_align_center(HOR, "5. 졸업기록 열람\n\n\n");
-
+			text_align_center(HOR, "6. 게임 종료\n\n");
+			printSquare(80, 10, 110, 35);
 			gotoxy(HOR/2, 21);
 			scanf("%d", &player_select_1);
 
@@ -157,13 +164,15 @@ int main(void) {
 				system("cls");
 				continue;
 			}
-		case 3:
+		case 3:	// 플레이어 선택
 
-		case 4:
+		case 4:	// 개발자 모드
 
-		case 5:
+		case 5:	// 
 
-			// 오류나서 일단 default문 추가
+		case 6:
+			game_start = 0;
+			break;
 		default:
 			break;
 		}
@@ -175,54 +184,25 @@ int main(void) {
 			flag(level);
 			system("cls");
 			printMap();
-			tm1 = time(NULL); // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함.
-			while (game_start) {
+			tm1 = time(NULL); // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함. -> 완료
+			while (main_game_start) {
 				gotoxy(x, y);
-				printf("▷\b\b");			// 주인공 문자 출력 부분
-				ch = _getch();
-				printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
-				if (ch == 224) {		// 방향키 이동 부분
-					ch = _getch();
-					switch (ch) {
-					case 72:
-						ty = y - 1;
-						break;
-					case 80:
-						ty = y + 1;
-						break;
-					case 75:
-						tx = x - 2;
-						break;
-					case 77:
-						tx = x + 2;
-						break;
-					}
-					switch(detection(tx, ty, ch)){
-						// 빈 칸
-						case 0:
-							x = tx;
-							y = ty;
-							break;
-						// 장애물
-						case 2:
-							break;
-						// 교수
-						case 3:
+				printf("◈\b\b");			// 주인공 문자 출력 부분
+				
+				sprintf(text, "좌표 : %d, %d ", x/2, y);
+				gotoxy(107, 14);
+				printf("%s", text);
+				//printText("좌표 : ", 107, 14);
 
-							break;
-						// 깃발
-						case 4:
-							break;
-						// 보물
-						case 5:
-							game_start = 0;
-							break;
-					}
-				}
+				ch = _getch();
+				gotoxy(x, y);
+				printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
+				main_game_start = move(&x, &y, ch);	// x, y, ch 받아 사용자 위치 움직이는 부분
 			}
-			// 게임 종료시 부분(whlie문 끝)
 		}
-		
+		// 게임 종료시 부분(whlie문 끝)
+		tm2 = time(NULL);
+
 	}
 	return 0;
 }

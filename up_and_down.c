@@ -1,48 +1,55 @@
-/* ���ٿ� ����
-- �������� 1 - 20 ���� ���� ����
-- 5�� �ȿ� ���߸� ���
-- Try 1�� �þ���� 1�б� �߰�(try 6����1�б� �߰�) 
-- ������ ���� �ݿ��� ���� ������� (�� �κ��� ����...) */
+/* 업다운 게임 (초급 게임)
+- 랜덤으로 1 - 20 사이 숫자 결정
+- 5번 안에 맞추면 통과
+- Try 1번 늘어날수록 1학기 추가(try 6번→1학기 추가)
+- 점수에 대한 반영을 학사 점수단위에 맞게 출력해줘야함 (이 부분은 아직...) */
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-
-int main()
+#include <windows.h>
+#define DEFAULT 5 // 감점 당하지 않는 최대 횟수
+#define RANGE 20 // 난수 생성 범위
+void up_and_down(int answer)
 {
-	int k, answer, number;
-	int i = 0;
+	int k, number;
+	int i = 1;
 	srand(time(NULL));
-	number = (rand() % 20) + 1;
-	printf("1���� 20 ������ ���� ���纸����!\n");
-	printf("��ȸ�� �� 5���Դϴ�. 5ȸ �ʰ��� 1ȸ�� 1�бⰡ �߰��˴ϴ�!\n");
+	number = (rand() % RANGE) + 1;
 	
-	do 
+
+	do
 	{
-		printf("���õ� ���� ���� �����ϱ��? : ");
+		printf("1부터 20 사이의 수를 맞춰보세요!\n");
+		printf("기회는 총 5번입니다. 5회 초과시 1회당 1학기가 추가됩니다!\n");
+		printf("%d번째 시도입니다!\n", i);
+		printf("제시된 수는 과연 무엇일까요? : ");
 		scanf("%d", &answer);
 
-		if (answer > 20)
-			printf("�Է��Ͻ� ���� 20���� Ů�ϴ�! �ٽ� �Է����ּ���!\n");
+		if (answer > RANGE)
+			printf("입력하신 값이 20보다 큽니다! 다시 입력해주세요!\n");
 
-		else if (answer <= 20)
+		else if (answer <= RANGE)
 		{
 			i++;
 			if (answer != number)
 			{
-				printf("\n��~");
+				printf("\n땡~");
 				if (answer < number)
-					printf("�亸�� �۽��ϴ�!\n");
+					printf("답보다 작습니다!\n");
 				else if (answer > number)
-					printf("�亸�� Ů�ϴ�!\n");
-				printf("�ٽ� �ѹ� �غ�����!\n");
-				printf("������� �õ��� Ƚ���� %d���Դϴ�.\n", i);
+					printf("답보다 큽니다!\n");
+				printf("다시 한번 해보세요!\n");
+				
 			}
 		}
+		Sleep(1500);
+		system("cls");
 	} while (answer != number);
 
-	printf("�����Դϴ�!\n");
-	printf("�� %d������ ������ Ŭ�����߽��ϴ�!\n", i);
+	printf("정답입니다!\n");
+	printf("총 %d번만에 게임을 클리어했습니다!\n", i);
 
-	if (i >= 6)
-		printf("�� %d�� �õ��Ͽ����Ƿ� %d�б⸸ŭ �߰��˴ϴ�...\n", i, i - 5);
+	if (i > DEFAULT)
+		printf("총 %d번 시도하였으므로 %d(학사 난이도에 맞게 단위 수정)만큼 추가됩니다...\n", i, i - DEFAULT);
 }

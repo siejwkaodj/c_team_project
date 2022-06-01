@@ -203,7 +203,7 @@ int main(void) {
 		}
 		// 게임 종료시 부분(whlie문 끝)
 		tm2 = time(NULL);
-
+		// TODO - 미니게임 및 점수계산부분 추가
 	}
 	return 0;
 }

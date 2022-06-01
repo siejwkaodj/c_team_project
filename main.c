@@ -24,6 +24,9 @@ int main(void) {
 	int x = 40, y = 12, ch;	// 플레이어 위치
 	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 	char player_name[] = { 0 };
+	
+	time_t tm1, tm2; // 게임 시간 받는 변수
+	
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
 	system("mode con cols=190 lines=60");	// cols= 190하면 오류남. 꼭 등호 뒤에 붙여서 하기.
@@ -168,6 +171,7 @@ int main(void) {
 			flag(level);
 			system("cls");
 			printMap();
+			tm1 = time(NULL) // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함.
 			while (1) {
 				gotoxy(x, y);
 				printf("▷\b\b");			// 주인공 문자 출력 부분

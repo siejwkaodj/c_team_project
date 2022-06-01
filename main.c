@@ -1,9 +1,10 @@
 ﻿//main 함수
 #include "header.h"
-
+#define CHAR_LENGTH 1000
 // 내부정의 함수
 void text_align_center(int columns, char* text);
 void gotoxy(int x, int y);
+void menu(int);
 
 // 외부정의 함수
 extern void printMap();							// 맵 출력하는 함수
@@ -28,34 +29,25 @@ int main(void) {
 	int game_start = 1;
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	
-	char player_name[1000];		// { 0 }으로 저장하면 크기 1됨.
-	char text[1000];		// 문장 출력할때 임시저장하는 변수
-	
-	time_t tm1, tm2; // 게임 시간 받는 변수
-	
 	int rank[4] = { 0 }; // rank[0] = 학사 취득 학기 저장, rank[1] = 석사 취득 학기 저장, rank[2] = 박사 취득 학기 저장
+
+	char letter;
+	char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
+	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수
+	
+	time_t tm1, tm2; // 게임 시간 받는 변수	
 	
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
 	system("mode con cols=190 lines=60");	// cols= 190하면 오류남. 꼭 등호 뒤에 붙여서 하기.
-	//GAME START 혹은 게임이름으로 변경 필요...0530 완료
 
-	gotoxy(0, 10);
-	text_align_center(HOR, " #####      ##    ##   ##  #######                #####   ########    ##      ######  ########");
-	text_align_center(HOR, "##   ##    ####   ### ###   ##  ##               ##   ##  #  ##  #   ####     ##  ##  #  ##  #");
-	text_align_center(HOR, "##        ##  ##  #######   ##                   ##          ##     ##  ##    ##  ##     ##   ");
-	text_align_center(HOR, "##        ######  ## # ##   ####                 #######     ##     ######    #####      ##   ");
-	text_align_center(HOR, "##  ###   ##  ##  ##   ##   ##                        ##     ##     ##  ##    ####       ##   ");
-	text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##               ##   ##     ##     ##  ##    ## ##      ##   ");
-	text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####     ####    ##  ##    ###  ##   ####  ");
 
-	char letter;
-	letter = _getch();
-
-	while (letter == '\n') {
+	menu(1);	// GAME START 출력 부분
+	
+	do{
 		letter = _getch();
 	}
-
+	while (letter == '\n');
 
 	gotoxy(0, 20);
 	text_align_center(HOR, "[ 다소 민감한 내용이 포함되어 있으니 학부생 및 대학원생은 플레이에 조심하세요. ]\n");
@@ -106,8 +98,9 @@ int main(void) {
 		// 플레이어 메뉴 선택 입력 잘못되었을때 다시 받는 부분
 		while (player_select_1 < 1 || player_select_1 > 5) {
 			system("cls");	// clear screen후 문자출력해야지 안그러면 다 지워진 후에 출력함.
+			gotoxy(0, 0);
 			text_align_center(HOR, "\n\n다시 입력해주세요.");
-			
+			gotoxy(0, 12);
 			text_align_center(HOR, "1. 게임설명\n\n");
 			text_align_center(HOR, "2. 난이도 선택\n\n");
 			text_align_center(HOR, "3. 캐릭터 선택\n\n");
@@ -115,7 +108,7 @@ int main(void) {
 			text_align_center(HOR, "5. 졸업기록 열람\n\n\n");
 			text_align_center(HOR, "6. 게임 종료\n\n");
 			printSquare(80, 10, 110, 35);
-			gotoxy(HOR/2, 21);
+			gotoxy(HOR/2, 30);
 			scanf("%d", &player_select_1);
 
 
@@ -169,9 +162,9 @@ int main(void) {
 			break;
 		case 4:	// 개발자 모드
 			break;
-		case 5:	// 
+		case 5:	// 졸업기록 열람
 			break;
-		case 6:
+		case 6:	// 게임 종료
 			game_start = 0;
 			break;
 		default:
@@ -225,12 +218,36 @@ void gotoxy(int x, int y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 }
 
-/* GAME OVER
-text_align_center(HOR, " #####      ##    ##   ##  #######                #####    ##  ##  #######   ######  \n");
-text_align_center(HOR, "##   ##    ####   ### ###   ##  ##               ##   ##   ##  ##   ##  ##   ##  ##  \n");
-text_align_center(HOR, "##        ##  ##  #######   ##                   ##   ##   ##  ##   ##       ##  ##  \n");
-text_align_center(HOR, "##        ######  ## # ##   ####                 ##   ##   ##  ##   ####     #####   \n");
-text_align_center(HOR, "##  ###   ##  ##  ##   ##   ##                   ##   ##   ##  ##   ##       ####    \n");
-text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##           ##  ##   ##    ####    ##  ##   ## ##   \n");
-text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####      ##    #######   ###  ## \n");
-*/
+// 그냥 메뉴 출력해주는 것들 모아놓은 함수
+void menu(int n){
+	switch(n){
+		case 1:
+			//GAME START 혹은 게임이름으로 변경 필요...0530 완료
+
+			gotoxy(0, 10);
+			text_align_center(HOR, " #####      ##    ##   ##  #######                #####   ########    ##      ######  ########");
+			text_align_center(HOR, "##   ##    ####   ### ###   ##  ##               ##   ##  #  ##  #   ####     ##  ##  #  ##  #");
+			text_align_center(HOR, "##        ##  ##  #######   ##                   ##          ##     ##  ##    ##  ##     ##   ");
+			text_align_center(HOR, "##        ######  ## # ##   ####                 #######     ##     ######    #####      ##   ");
+			text_align_center(HOR, "##  ###   ##  ##  ##   ##   ##                        ##     ##     ##  ##    ####       ##   ");
+			text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##               ##   ##     ##     ##  ##    ## ##      ##   ");
+			text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####     ####    ##  ##    ###  ##   ####  ");
+			break;
+		case 2:
+			text_align_center(HOR, " #####      ##    ##   ##  #######                #####    ##  ##  #######   ######  \n");
+			text_align_center(HOR, "##   ##    ####   ### ###   ##  ##               ##   ##   ##  ##   ##  ##   ##  ##  \n");
+			text_align_center(HOR, "##        ##  ##  #######   ##                   ##   ##   ##  ##   ##       ##  ##  \n");
+			text_align_center(HOR, "##        ######  ## # ##   ####                 ##   ##   ##  ##   ####     #####   \n");
+			text_align_center(HOR, "##  ###   ##  ##  ##   ##   ##                   ##   ##   ##  ##   ##       ####    \n");
+			text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##           ##  ##   ##    ####    ##  ##   ## ##   \n");
+			text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####      ##    #######   ###  ## \n");
+			break;
+		case 3:
+
+		break;
+		
+		default:
+		break;
+	}
+	return;
+}

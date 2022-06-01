@@ -40,6 +40,6 @@ void detection(int x,int y, int ch) {
 			x += 2;
 		break;
 	}
-	return detecrional;
+	return detectional;
 }
 	// 이동할 칸에 무엇이 있는지 판정후 좌표를 다시 제자리로 이동함.

@@ -10,6 +10,7 @@ void gotoxy(int x, int y);
 void printMap();
 void flag(int level);
 extern printSquare(int, int, int, int);
+extern detection(int, int, int);
 
 // 전역변수
 int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
@@ -22,7 +23,9 @@ const int min_y = 2;
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
 	int x = 40, y = 12, ch;	// 플레이어 위치
+	int tx, ty;				// 플레이어 이동 임시 x, y좌표
 	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
+	int game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	char player_name[] = { 0 };
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
@@ -168,7 +171,7 @@ int main(void) {
 			flag(level);
 			system("cls");
 			printMap();
-			while (1) {
+			while (game_start) {
 				gotoxy(x, y);
 				printf("▷\b\b");			// 주인공 문자 출력 부분
 				ch = _getch();
@@ -176,27 +179,43 @@ int main(void) {
 				if (ch == 224) {		// 방향키 이동 부분
 					ch = _getch();
 					switch (ch) {
-
-					// 판정 함수 추가 부분
 					case 72:
-						if (y > min_y)		//x=0, 70, y = 0, 70부분이 경계이므로 그부분만 안닿게 설정
-							y--;
+						ty = y - 1;
 						break;
 					case 80:
-						if (y < max_y)
-							y++;
+						ty = y + 1;
 						break;
 					case 75:
-						if (x > min_x)
-							x -= 2;
+						tx = x - 2;
 						break;
 					case 77:
-						if (x < max_x)
-							x += 2;
+						tx = x + 2;
 						break;
+					}
+					switch(detection(tx, ty, ch)){
+						// 빈 칸
+						case 0:
+							x = tx;
+							y = ty;
+							break;
+						// 장애물
+						case 2:
+							break;
+						// 교수
+						case 3:
+
+							break;
+						// 깃발
+						case 4:
+							break;
+						// 보물
+						case 5:
+							game_start = 0;
+							break;
 					}
 				}
 			}
+			// 게임 종료시 부분
 		}
 		
 	}

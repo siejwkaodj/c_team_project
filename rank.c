@@ -3,26 +3,25 @@
 
 
 void rank(int rank[], char player_name[]) {
-	text_align_center(HOR, "Á¹¾÷±â·Ï ¿­¶÷\n\n\n");
+	text_align_center(HOR, "ì¡¸ì—…ê¸°ë¡ ì—´ëŒ\n\n\n");
 	if (rank[0] == 0) {
-		printf("ÇĞ»ç Ãëµæ ±â·ÏÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù");
+		printf("í•™ì‚¬ ì·¨ë“ ê¸°ë¡ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤");
 	}
 	else {
-		text_align_center(HOR, "%s´ÔÀÇ ÇĞ»ç Ãëµæ ±â·Ï : %d ÇĞ±â\n", player_name, rank[0]);
+		text_align_center(HOR, "%së‹˜ì˜ í•™ì‚¬ ì·¨ë“ ê¸°ë¡ : %d í•™ê¸°\n", player_name, rank[0]);
 	}
 	if (rank[1] == 0) {
-		printf("¼®»ç Ãëµæ ±â·ÏÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù");
+		printf("ì„ì‚¬ ì·¨ë“ ê¸°ë¡ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤");
 	}
 	else {
-		text_align_center(HOR, "%s´ÔÀÇ ¼®»ç Ãëµæ ±â·Ï : %d ÇĞ±â\n", player_name, rank[1]);
+		text_align_center(HOR, "%së‹˜ì˜ ì„ì‚¬ ì·¨ë“ ê¸°ë¡ : %d í•™ê¸°\n", player_name, rank[1]);
 	}
 	if (rank[2] == 0) {
-		printf("¹Ú»ç Ãëµæ ±â·ÏÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù");
+		printf("ë°•ì‚¬ ì·¨ë“ ê¸°ë¡ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤");
 	}
 	else {
-		text_align_center(HOR, "%s´ÔÀÇ ¹Ú»ç Ãëµæ ±â·Ï : %d ÇĞ±â\n", player_name, rank[2]);
+		text_align_center(HOR, "%së‹˜ì˜ ë°•ì‚¬ ì·¨ë“ ê¸°ë¡ : %d í•™ê¸°\n", player_name, rank[2]);
 	}
 
-
-
+return;
 }

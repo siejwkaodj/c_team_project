@@ -1,7 +1,10 @@
 ﻿#include "header.h"
 extern detection(int*, int*, int);
-extern printText(char*, int, int);  // printMap.c에 있음.
+extern printText(char*, int, int);  // printMap.c에 있음. -> 기본위치 107, 12정도
 // 사용자 위치 배열에서 움직이는 함수
+void professor();
+void flag_effect();
+
 int move(int *x, int *y, int ch){
     char text[1000];
     int tx = *x, ty = *y;   // x, y좌표 임시로 저장하는 변수
@@ -33,8 +36,8 @@ int move(int *x, int *y, int ch){
             break;
         // 깃발
         case 4:
-            printText("                                                            ",107, 12);  // 지우기
-            printText("꽝!",107, 12);
+            flag_effect();
+            
             *x = tx;
             *y = ty;
             break;
@@ -54,6 +57,18 @@ int move(int *x, int *y, int ch){
             break;
     }
     return 1;
+}
+// 깃발 보물 아닌거 먹었을 때 랜덤 효과 나오는거 -> 추가 필요
+void flag_effect(){
+    int temp = rand() % 10;
+    printText("                                                            ",107, 12);  // 지우기
+    if (temp == 0){
+        printText("꽝!",107, 12);
+    }
+    else if(temp == 1){
+
+    }
+    return;
 }
 
 // 교수 때문에 못 움직이는거 구현해야함

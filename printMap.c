@@ -138,6 +138,7 @@ void flag(int level) {
 	return;
 }
 
+// 기본 위치 107, 12 정도
 void printText(char * text, int x, int y){
 	gotoxy(x, y);
 	printf("%s", text);

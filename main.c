@@ -118,6 +118,7 @@ int main(void) {
 		// 메뉴 선택별 케이스.
 		switch (player_select_1) {
 		case 1:	// 게임 설명
+			system("cls");
 			text_align_center(HOR, "게임 설명\n");	// 이름 오류 수정
 			//게임 설명 추가 요망
 			text_align_center(HOR, "\n\n뒤로 가기 - ESC");
@@ -173,9 +174,8 @@ int main(void) {
 		}
 
 
-		// 게임 실행 부분, 실행하려면 나머지부분 주석처리하고 실행
-		
-		if(player_select_1 == 2 && ch == 'y') {	// 난이도 선택 이후에만 게임 실행
+		// main 게임 실행 부분
+		if(player_select_1 == 2 && ch == 'y') {	// 난이도 선택 + 플레이어 선택값 y일때만 실행
 			flag(level);
 			system("cls");
 			printMap();

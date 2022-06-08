@@ -131,24 +131,28 @@ int main(void) {
 				gotoxy(0, 10);	// y좌표 이동시 사용
 				text_align_center(HOR, "난이도를 선택해주세요 (1 - 초급, 2 - 중급, 3 - 고급) : \n");
 				gotoxy(HOR / 2, 12);
-				scanf(" %d", &level);
-
-
-				switch (level) {
-				case 1:
-					text_align_center(HOR, "[ 초급 ] 난이도를 선택하셨습니다.\n");
-					break;
-				case 2:
-					text_align_center(HOR, "[ 중급 ] 난이도를 선택하셨습니다.");
-					break;
-				case 3:
-					text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
-					break;
-				default:
+				
+				ch = _getch();
+				while(ch != '1' || ch != '2' || ch != '3'){
 					text_align_center(HOR, "잘못 입력하셨습니다.");
 					text_align_center(HOR, "다시 입력해주세요 : ");
 					scanf(" %d", &level);
-
+				}
+					
+				//scanf(" %d", &level);
+				level = ch;
+				gotoxy(0, 13);
+				switch (level) {
+				case '1':
+					text_align_center(HOR, "[ 초급 ] 난이도를 선택하셨습니다.\n");
+					break;
+				case '2':
+					text_align_center(HOR, "[ 중급 ] 난이도를 선택하셨습니다.");
+					break;
+				case '3':
+					text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
+					break;
+				default:
 				}
 				text_align_center(HOR, "계속 진행하시겠습니까? (y - 게임시작 / n - 메뉴로 돌아가기/ r - 레벨 다시 고르기)\n");
 				ch = _getch();

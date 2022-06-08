@@ -1,16 +1,12 @@
 ﻿//공룡 게임 변형
-// 함수 이름, 헤더파일 수정 필요
-#include <stdio.h>
-#include <stdlib.h>
-#include <conio.h>
-#include <windows.h>
+#include "header.h"
 #define MAN_X 0
 #define MAN_Y 15
 #define TREE_X 94
 #define TREE_Y 25
 
 void setting();
-void gotoxy(int x, int y);
+extern void gotoxy(int x, int y);
 void start();
 int game(int);
 void score(int);
@@ -183,12 +179,6 @@ void tree() { //나무 오른쪽에서 왼쪽으로 이동
 
 	if (treeX == 0)
 		treeX = TREE_X; //나무가 왼쪽 끝으로 이동하면 초기화
-}
-
-void gotoxy(int x, int y)
-{
-	COORD pos = { x,y };
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
 void setting() {

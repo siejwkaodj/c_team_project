@@ -14,6 +14,7 @@ void printMap() {
 	extern min_y;
 	extern size;
 	//char ch = '■';		// 변수에 저장하고 출력하면 이상하게 나옴
+	system("cls");
 	// 맵 전체 사각형 출력
 	printSquare(min_x-2, min_y-1, max_x+2, max_y+1);
 	
@@ -110,6 +111,7 @@ void flag(int level) {
 	int x1, y1;         // 좌표 임시 변수
 	int wallNum = 0;    // 장애물 개수 지정
 	int num = 0;        // 깃발 개수 세는것
+	int i = 0;
 	// 장애물 생성
 	switch (level) {
 	case 1:
@@ -132,6 +134,15 @@ void flag(int level) {
 		if (map[y1][x1] == 0) {
 			map[y1][x1] = 2;                // 장애물 - 2로 표시
 			wallNum--;
+		}
+	}
+	// 교수 생성
+	i = 0;
+	while (i++ < num) {
+		x1 = rand() % (size - 1);
+		y1 = rand() % (size - 1);
+		if (map[y1][x1] == 0) {
+			map[y1][x1] = 3;                // 장애물 - 2로 표시
 		}
 	}
 	// 깃발 생성 

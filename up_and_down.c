@@ -3,16 +3,12 @@
 - 5번 안에 맞추면 통과
 - Try 1번 늘어날수록 1학기 추가(try 6번→1학기 추가)
 - 점수에 대한 반영을 학사 점수단위에 맞게 출력해줘야함 (이 부분은 아직...) */
-#define _CRT_SECURE_NO_WARNINGS
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include <windows.h>
+#include "header.h"
 #define DEFAULT 5 // 감점 당하지 않는 최대 횟수
 #define RANGE 20 // 난수 생성 범위
-int up_and_down_main(int answer)
+int up_and_down_main()
 {
-	int k, number;
+	int k, number, answer;
 	int i = 1;
 	srand(time(NULL));
 	number = (rand() % RANGE) + 1;

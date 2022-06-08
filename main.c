@@ -14,6 +14,10 @@ extern int detection(int, int, int);			// x, y, ch 인자를 전달, 사용자�
 extern void printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
 extern void printBlank(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형 내의 공간을 모두 지워줌.
 
+// 미니게임
+extern int up_and_down_main();
+extern int jumping_man_main();
+
 // 전역변수
 int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
 const int HOR = 190;
@@ -25,11 +29,14 @@ const int min_y = 3;
 
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
+	int i = 0;			// 임시 반복 변수
+	int *p;				// 임시 포인터 변수
 	int x = 40, y = 12;	// 플레이어 위치
 	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 	int game_start = 1;
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
-	
+	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
+
 	int rank[4] = { 0 }; // rank[0] = 학사 취득 학기 저장, rank[1] = 석사 취득 학기 저장, rank[2] = 박사 취득 학기 저장
 	int ch;	// 사용자 움직임, 입력 주로 받는 변수
 	char letter;
@@ -111,13 +118,12 @@ int main(void) {
 			printSquare(80, 10, 110, 35);
 			gotoxy(HOR/2, 30);
 			scanf("%d", &player_select_1);
-
-
 		}
 
 		// 메뉴 선택별 케이스.
 		switch (player_select_1) {
 		case 1:	// 게임 설명
+			system("cls");
 			text_align_center(HOR, "게임 설명\n");	// 이름 오류 수정
 			//게임 설명 추가 요망
 			text_align_center(HOR, "\n\n뒤로 가기 - ESC");
@@ -173,11 +179,9 @@ int main(void) {
 		}
 
 
-		// 게임 실행 부분, 실행하려면 나머지부분 주석처리하고 실행
-		
-		if(player_select_1 == 2 && ch == 'y') {	// 난이도 선택 이후에만 게임 실행
+		// main 게임 실행 부분
+		if(player_select_1 == 2 && ch == 'y') {	// 난이도 선택 + 플레이어 선택값 y일때만 실행
 			flag(level);
-			system("cls");
 			printMap();
 			tm1 = time(NULL); // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함. -> 완료
 			while (main_game_start) {
@@ -195,18 +199,32 @@ int main(void) {
 				main_game_start = move(&x, &y, ch);	// x, y, ch 받아 사용자 위치 움직이는 부분
 			}
 		}
+		// 게임 종료시 map 0으로 초기화 -> 포인터 쓰니까 자꾸 오류남
+		// p = &map[0][0];
+		// while ((int)(&map[size-1][size-1] - p) < size * size){
+		// 	*p = 0;
+		// 	p++;
+		// }
+		for(int i = 0; i < size; i++)
+			for(int j = 0; j < size; j++)
+				map[i][j] = 0;
+		
 		// 게임 종료시 부분(whlie문 끝)
 		tm2 = time(NULL);
 		// TODO - 미니게임 및 점수계산부분 추가
 		if (level == 1){
-			
+			// 초급 - 업다운
+			minigame_result = up_and_down_main();
 		}
 		else if(level == 2){
-
+			// 중급 - 가위바위보
 		}
 		else if(level == 3){
-
+			// 고급 - 공룡
+			minigame_result = jumping_man_main();
 		}
+
+
 	}
 	return 0;
 }
@@ -254,10 +272,10 @@ void menu(int n){
 			break;
 		case 3:
 
-		break;
+			break;
 		
 		default:
-		break;
+			break;
 	}
 	return;
 }

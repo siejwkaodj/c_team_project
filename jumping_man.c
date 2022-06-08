@@ -1,5 +1,5 @@
-//°ø·æ °ÔÀÓ º¯Çü
-// ÇÔ¼ö ÀÌ¸§, Çì´õÆÄÀÏ ¼öÁ¤ ÇÊ¿ä
+ï»¿//ê³µë£¡ ê²Œì„ ë³€í˜•
+// í•¨ìˆ˜ ì´ë¦„, í—¤ë”íŒŒì¼ ìˆ˜ì • í•„ìš”
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -17,12 +17,12 @@ void score(int);
 int crashing();
 void end(int);
 
-//»ç¶÷ °ü·Ã ÇÔ¼ö
+//ì‚¬ëŒ ê´€ë ¨ í•¨ìˆ˜
 void draw_man(int);
 void earase_man();
 void earase_foot();
 
-//³ª¹« °ü·Ã ÇÔ¼ö
+//ë‚˜ë¬´ ê´€ë ¨ í•¨ìˆ˜
 void tree();
 void draw_tree();
 void erase_tree();
@@ -32,12 +32,12 @@ int treeX = TREE_X;
 int manX = MAN_X;
 int manY = MAN_Y;
 
-int key = 0; //Å°º¸µå ÀÔ·Â ¹Ş±â
+int key = 0; //í‚¤ë³´ë“œ ì…ë ¥ ë°›ê¸°
 
 int jumping_man_main()
 {
-	int tic = 0; //°ÔÀÓ ³» ½Ã°£ ´ÜÀ§ÀÌÀÚ Á¡¼ö °áÁ¤ ¿ä¼Ò
-	int crash = 0; //Ãæµ¹ Ã¼Å©
+	int tic = 0; //ê²Œì„ ë‚´ ì‹œê°„ ë‹¨ìœ„ì´ì ì ìˆ˜ ê²°ì • ìš”ì†Œ
+	int crash = 0; //ì¶©ëŒ ì²´í¬
 
 	setting();
 	start();
@@ -46,14 +46,14 @@ int jumping_man_main()
 
 		tic = game(tic);
 
-		//'½ºÆäÀÌ½º ¹Ù' ´©¸£¸é Á¡ÇÁ
+		//'ìŠ¤í˜ì´ìŠ¤ ë°”' ëˆ„ë¥´ë©´ ì í”„
 		if (_kbhit()) {
 			key = _getch();
-			if (key == 32 && manY - 15 == 0) { //'½ºÆäÀÌ½º ¹Ù'°¡ ´­¸®°í »ç¶÷ÀÌ ¹Ù´Ú¿¡ ÀÖÀ» ¶§
+			if (key == 32 && manY - 15 == 0) { //'ìŠ¤í˜ì´ìŠ¤ ë°”'ê°€ ëˆŒë¦¬ê³  ì‚¬ëŒì´ ë°”ë‹¥ì— ìˆì„ ë•Œ
 
-				int h = 0; //Á¡ÇÁ ³ôÀÌ ÃÊ±âÈ­
+				int h = 0; //ì í”„ ë†’ì´ ì´ˆê¸°í™”
 
-				while (h < 8) { //yÃàÀ¸·Î 8Ä­ »ó½Â
+				while (h < 8) { //yì¶•ìœ¼ë¡œ 8ì¹¸ ìƒìŠ¹
 					earase_man();
 					manY--;
 					tic = game(tic);
@@ -63,7 +63,7 @@ int jumping_man_main()
 					h++;
 				}
 
-				while (h > 0) { //yÃàÀ¸·Î 8Ä­ ÇÏ°­
+				while (h > 0) { //yì¶•ìœ¼ë¡œ 8ì¹¸ í•˜ê°•
 					tic = game(tic);
 					crash = crashing();
 					if (crash == -1)
@@ -75,7 +75,7 @@ int jumping_man_main()
 			}
 		}
 		crash = crashing();
-		if (crash == -1) //Ãæµ¹ ½Ã Å»Ãâ
+		if (crash == -1) //ì¶©ëŒ ì‹œ íƒˆì¶œ
 			break;
 
 	}
@@ -85,34 +85,34 @@ int jumping_man_main()
 	system("pause>>null");
 	return (tic / 5 * 10);
 }
-int game(int tic) { //°ÔÀÓÈ­¸é ¸ŞÀÎ ¿ä¼Ò
+int game(int tic) { //ê²Œì„í™”ë©´ ë©”ì¸ ìš”ì†Œ
 	score(tic);
 	tree();
 	draw_man(tic);
 
-	Sleep(20); //0.02ÃÊ		//µô·¹ÀÌ ¿¹»ó
+	Sleep(20); //0.02ì´ˆ		//ë”œë ˆì´ ì˜ˆìƒ
 	tic++;
 
 	return tic;
 }
 
-int crashing() { //Ãæµ¹ ÆÇÁ¤	//³­ÀÌµµ 'ÇÏ'
-	// (°¡·Î1 && °¡·Î2) && ¼¼·Î
-	// °¡·Î1: ³ª¹«°¡ °¡·Î 11Ä­º¸´Ù µÚ¿¡ ÀÖÀ½
-	// °¡·Î2: ³ª¹«°¡ °¡·Î 15Ä­º¸´Ù ¾Õ¿¡ ÀÖÀ½
-	// °¡·Î1 && °¡·Î2: ³ª¹«°¡ °¡·Î 11Ä­°ú 15Ä­ »çÀÌ¿¡ ÀÖÀ½
-	// ¼¼·Î: »ç¶÷ ¹ß 3Ä­ÀÌ ³ª¹« 5Ä­ º¸´Ù ³ôÀÌ°¡ °°°Å³ª ³·À» ¶§
+int crashing() { //ì¶©ëŒ íŒì •	//ë‚œì´ë„ 'í•˜'
+	// (ê°€ë¡œ1 && ê°€ë¡œ2) && ì„¸ë¡œ
+	// ê°€ë¡œ1: ë‚˜ë¬´ê°€ ê°€ë¡œ 11ì¹¸ë³´ë‹¤ ë’¤ì— ìˆìŒ
+	// ê°€ë¡œ2: ë‚˜ë¬´ê°€ ê°€ë¡œ 15ì¹¸ë³´ë‹¤ ì•ì— ìˆìŒ
+	// ê°€ë¡œ1 && ê°€ë¡œ2: ë‚˜ë¬´ê°€ ê°€ë¡œ 11ì¹¸ê³¼ 15ì¹¸ ì‚¬ì´ì— ìˆìŒ
+	// ì„¸ë¡œ: ì‚¬ëŒ ë°œ 3ì¹¸ì´ ë‚˜ë¬´ 5ì¹¸ ë³´ë‹¤ ë†’ì´ê°€ ê°™ê±°ë‚˜ ë‚®ì„ ë•Œ
 	if ((manX + 6 <= treeX + 2 && manX + 10 >= treeX + 2) && manY + 12 >= TREE_Y + 2)
 		return -1;
 	else
 		return 0;
 }
 
-void draw_man(int tic) { //»ç¶÷ ±×¸®±â
+void draw_man(int tic) { //ì‚¬ëŒ ê·¸ë¦¬ê¸°
 
 	int toc = tic % 8;
 
-	//¸ö
+	//ëª¸
 	gotoxy(manX, manY);			printf("                     \n");
 	gotoxy(manX, manY + 1);		printf("            @___@   \n");
 	gotoxy(manX, manY + 2);		printf("           @*   *@  \n");
@@ -128,30 +128,30 @@ void draw_man(int tic) { //»ç¶÷ ±×¸®±â
 	gotoxy(manX, manY + 12);	printf("            @  @  \n");
 
 
-	//¹ß ±¸¸£±â ±¸Çö
-	if (toc >= 0 && toc <= 3) //4tic µ¿¾È À¯Áö
+	//ë°œ êµ¬ë¥´ê¸° êµ¬í˜„
+	if (toc >= 0 && toc <= 3) //4tic ë™ì•ˆ ìœ ì§€
 	{
 		earase_foot();
-		gotoxy(manX, manY + 13); //¹ß ±×¸®±â
+		gotoxy(manX, manY + 13); //ë°œ ê·¸ë¦¬ê¸°
 		printf("           @   @  \n");
 		printf("          @@   @@");
 	}
 	else
 	{
 		earase_foot();
-		gotoxy(manX, manY + 13); //¹ß ±×¸®±â
+		gotoxy(manX, manY + 13); //ë°œ ê·¸ë¦¬ê¸°
 		printf("           @   @\n");
 		printf("         @@   @@");
 	}
 }
 
-void earase_foot() { //¹ß Áö¿ì±â
+void earase_foot() { //ë°œ ì§€ìš°ê¸°
 	gotoxy(manX, manY + 13);
 	printf("                 \n");
 	printf("                 ");
 }
 
-void earase_man() { //»ç¶÷ Áö¿ì±â
+void earase_man() { //ì‚¬ëŒ ì§€ìš°ê¸°
 	for (int i = 0; i < 24; i++) {
 		gotoxy(manX, 6 + i);
 		printf("                              ");
@@ -160,7 +160,7 @@ void earase_man() { //»ç¶÷ Áö¿ì±â
 }
 
 
-void draw_tree() { //³ª¹« ±×¸®±â
+void draw_tree() { //ë‚˜ë¬´ ê·¸ë¦¬ê¸°
 	
 	gotoxy(treeX, TREE_Y + 1);		  printf("  #  \n");
 	gotoxy(treeX, TREE_Y + 2);		  printf("# # #\n");
@@ -168,7 +168,7 @@ void draw_tree() { //³ª¹« ±×¸®±â
 	gotoxy(treeX + 2, TREE_Y + 4);		printf("#");
 }
 
-void erase_tree() { //³ª¹« Áö¿ì±â
+void erase_tree() { //ë‚˜ë¬´ ì§€ìš°ê¸°
 	gotoxy(treeX + 3, TREE_Y);		  printf("  \n");
 	gotoxy(treeX + 1, TREE_Y + 1);	printf("      \n");
 	gotoxy(treeX + 1, TREE_Y + 2);	printf("      \n");
@@ -176,13 +176,13 @@ void erase_tree() { //³ª¹« Áö¿ì±â
 	gotoxy(treeX + 3, TREE_Y + 4); 	  printf("  ");
 }
 
-void tree() { //³ª¹« ¿À¸¥ÂÊ¿¡¼­ ¿ŞÂÊÀ¸·Î ÀÌµ¿
-	treeX--; //¿ŞÂÊÀ¸·Î ÇÑ Ä­ ÀÌµ¿
-	erase_tree(); //Áö¿ì°í
-	draw_tree(); //±×¸®±â
+void tree() { //ë‚˜ë¬´ ì˜¤ë¥¸ìª½ì—ì„œ ì™¼ìª½ìœ¼ë¡œ ì´ë™
+	treeX--; //ì™¼ìª½ìœ¼ë¡œ í•œ ì¹¸ ì´ë™
+	erase_tree(); //ì§€ìš°ê³ 
+	draw_tree(); //ê·¸ë¦¬ê¸°
 
 	if (treeX == 0)
-		treeX = TREE_X; //³ª¹«°¡ ¿ŞÂÊ ³¡À¸·Î ÀÌµ¿ÇÏ¸é ÃÊ±âÈ­
+		treeX = TREE_X; //ë‚˜ë¬´ê°€ ì™¼ìª½ ëìœ¼ë¡œ ì´ë™í•˜ë©´ ì´ˆê¸°í™”
 }
 
 void gotoxy(int x, int y)
@@ -192,19 +192,19 @@ void gotoxy(int x, int y)
 }
 
 void setting() {
-	//ÄÜ¼ÖÃ¢ ¼³Á¤
+	//ì½˜ì†”ì°½ ì„¤ì •
 	system("title Jumping Man ");
 	system("mode con:cols=100 lines=30");
 
-	//Ä¿¼­ ¼³Á¤
+	//ì»¤ì„œ ì„¤ì •
 	HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO ConsoleCursor;
 	ConsoleCursor.dwSize = 1;
-	ConsoleCursor.bVisible = 0; //Ä¿¼­ ¼û±è
+	ConsoleCursor.bVisible = 0; //ì»¤ì„œ ìˆ¨ê¹€
 	SetConsoleCursorInfo(consoleHandle, &ConsoleCursor);
 }
 
-void start() { //½ÃÀÛ È­¸é
+void start() { //ì‹œì‘ í™”ë©´
 	while (1) {
 		gotoxy(30, 10);
 		printf("Press 'Space bar' to start the game");
@@ -212,7 +212,7 @@ void start() { //½ÃÀÛ È­¸é
 
 		if (_kbhit()) {
 			key = _getch();
-			if (key == 32) { //'½ºÆäÀÌ½º ¹Ù' ÀÔ·Â È®ÀÎ
+			if (key == 32) { //'ìŠ¤í˜ì´ìŠ¤ ë°”' ì…ë ¥ í™•ì¸
 				system("cls");
 				break;
 			}
@@ -220,12 +220,12 @@ void start() { //½ÃÀÛ È­¸é
 	}
 }
 
-void score(int tic) { //Á¡¼ö Ãâ·Â
+void score(int tic) { //ì ìˆ˜ ì¶œë ¥
 	gotoxy(45, 1);
-	printf("score : %4d", tic / 5 * 10); // tic/5 ´ç 10Á¡		//ÇÊµå Æø 4Ä­ È®º¸ (nÃµÁ¡±îÁö)
+	printf("score : %4d", tic / 5 * 10); // tic/5 ë‹¹ 10ì 		//í•„ë“œ í­ 4ì¹¸ í™•ë³´ (nì²œì ê¹Œì§€)
 }
 
-void end(int tic) { //¿£µù È­¸é
+void end(int tic) { //ì—”ë”© í™”ë©´
 	system("cls");
 	int a = 10;
 	gotoxy(a, a);		printf(" #####      ##    ##   ##  #######            #####    ##  ##  #######   ######  \n");
@@ -237,5 +237,5 @@ void end(int tic) { //¿£µù È­¸é
 	gotoxy(a, a + 6);	printf(" #####    ##  ##  ##   ##  #######            #####      ##    #######   ###  ## \n");
 
 	gotoxy(40, 20);
-	printf("final score : %4d", tic / 5 * 10); //ÃÖÁ¾ Á¡¼ö
+	printf("final score : %4d", tic / 5 * 10); //ìµœì¢… ì ìˆ˜
 }

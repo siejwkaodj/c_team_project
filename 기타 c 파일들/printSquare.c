@@ -1,4 +1,4 @@
-#include "header.h"
+﻿#include "header.h"
 extern gotoxy();
 
 void printSquare(int x1, int y1, int x2, int y2) {

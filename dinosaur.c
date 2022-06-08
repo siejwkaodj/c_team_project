@@ -1,4 +1,4 @@
-//공룡미니게임.c
+﻿//공룡미니게임.c
 // 함수 이름, 헤더파일 수정 필요
 #include <stdio.h>
 #include <stdlib.h>

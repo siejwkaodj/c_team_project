@@ -10,7 +10,7 @@
 #include <windows.h>
 #define DEFAULT 5 // 감점 당하지 않는 최대 횟수
 #define RANGE 20 // 난수 생성 범위
-void up_and_down(int answer)
+int up_and_down_main(int answer)
 {
 	int k, number;
 	int i = 1;
@@ -52,4 +52,6 @@ void up_and_down(int answer)
 
 	if (i > DEFAULT)
 		printf("총 %d번 시도하였으므로 %d(학사 난이도에 맞게 단위 수정)만큼 추가됩니다...\n", i, i - DEFAULT);
+
+	return i; // if문 때문에 일단은 i문으로 값을 반환시킴. 이후 main에서 추가학기를 따로 계산해주면 됨!
 }

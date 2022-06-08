@@ -34,7 +34,7 @@ int manY = MAN_Y;
 
 int key = 0; //키보드 입력 받기
 
-int main()
+int jumping_man_main()
 {
 	int tic = 0; //게임 내 시간 단위이자 점수 결정 요소
 	int crash = 0; //충돌 체크
@@ -83,7 +83,7 @@ int main()
 	end(tic);
 
 	system("pause>>null");
-	return 0;
+	return (tic / 5 * 10);
 }
 int game(int tic) { //게임화면 메인 요소
 	score(tic);

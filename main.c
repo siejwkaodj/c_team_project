@@ -24,13 +24,13 @@ const int min_y = 3;
 
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
-	int x = 40, y = 12, ch;	// 플레이어 위치
+	int x = 40, y = 12;	// 플레이어 위치
 	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 	int game_start = 1;
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	
 	int rank[4] = { 0 }; // rank[0] = 학사 취득 학기 저장, rank[1] = 석사 취득 학기 저장, rank[2] = 박사 취득 학기 저장
-
+	char ch;	// 사용자 움직임, 입력 주로 받는 변수
 	char letter;
 	char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
 	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수

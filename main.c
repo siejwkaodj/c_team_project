@@ -12,6 +12,7 @@ extern void flag(int level);						// 맵에 랜덤으로 깃발, 장애물 등�
 extern int move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 위치를 움직임. detection 사용됨.
 extern int detection(int, int, int);			// x, y, ch 인자를 전달, 사용자의 다음 움직임이 어디로 움직일지를 판단.
 extern void printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
+extern void printBlank(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형 내의 공간을 모두 지워줌.
 
 // 전역변수
 int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
@@ -30,7 +31,7 @@ int main(void) {
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	
 	int rank[4] = { 0 }; // rank[0] = 학사 취득 학기 저장, rank[1] = 석사 취득 학기 저장, rank[2] = 박사 취득 학기 저장
-	char ch;	// 사용자 움직임, 입력 주로 받는 변수
+	int ch;	// 사용자 움직임, 입력 주로 받는 변수
 	char letter;
 	char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
 	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수
@@ -131,28 +132,24 @@ int main(void) {
 				gotoxy(0, 10);	// y좌표 이동시 사용
 				text_align_center(HOR, "난이도를 선택해주세요 (1 - 초급, 2 - 중급, 3 - 고급) : \n");
 				gotoxy(HOR / 2, 12);
-				
-				ch = _getch();
-				while(ch != '1' || ch != '2' || ch != '3'){
-					text_align_center(HOR, "잘못 입력하셨습니다.");
-					text_align_center(HOR, "다시 입력해주세요 : ");
-					scanf(" %d", &level);
-				}
-					
-				//scanf(" %d", &level);
-				level = ch;
-				gotoxy(0, 13);
+				scanf(" %d", &level);
+
+
 				switch (level) {
-				case '1':
+				case 1:
 					text_align_center(HOR, "[ 초급 ] 난이도를 선택하셨습니다.\n");
 					break;
-				case '2':
+				case 2:
 					text_align_center(HOR, "[ 중급 ] 난이도를 선택하셨습니다.");
 					break;
-				case '3':
+				case 3:
 					text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
 					break;
 				default:
+					text_align_center(HOR, "잘못 입력하셨습니다.");
+					text_align_center(HOR, "다시 입력해주세요 : ");
+					scanf(" %d", &level);
+
 				}
 				text_align_center(HOR, "계속 진행하시겠습니까? (y - 게임시작 / n - 메뉴로 돌아가기/ r - 레벨 다시 고르기)\n");
 				ch = _getch();

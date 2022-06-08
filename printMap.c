@@ -4,6 +4,7 @@ extern size;
 extern map[50][50];
 
 void printSquare(int, int, int, int);
+void printBlank(int x1, int y1, int x2, int y2);
 void printText(char *, int, int);
 
 void printMap() {
@@ -84,6 +85,22 @@ void printSquare(int x1, int y1, int x2, int y2) {
 	gotoxy(x2, y2);
 	printf("┘");
 	
+	return;
+}
+
+// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형 내의 공간을 모두 지워줌.
+void printBlank(int x1, int y1, int x2, int y2) {
+	int px = x1, py = y1;
+	
+	while (py <= y2) {
+		px = x1;
+		while (px <= x2) {
+			gotoxy(px, py);
+			printf(" ");
+			px++;
+		}
+		py++;
+	}	
 	return;
 }
 

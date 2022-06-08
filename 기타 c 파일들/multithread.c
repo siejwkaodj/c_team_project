@@ -1,4 +1,4 @@
-// 멀티쓰레드로 addTarget, subtractTarget 실행하면서 사용자 입력 받고 출력하는 프로그램
+﻿// 멀티쓰레드로 addTarget, subtractTarget 실행하면서 사용자 입력 받고 출력하는 프로그램
 #define _CRT_SECURE_NO_WARNINGS
 #include <windows.h> // WinAPI 사용 
 #include <stdio.h>

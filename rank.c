@@ -22,6 +22,6 @@ void rank(int rank[], char player_name[]) {
 	else {
 		text_align_center(HOR, "%s님의 박사 취득 기록 : %d 학기\n", player_name, rank[2]);
 	}
-
+	text_align_center(HOR, "\n\n뒤로 가기 - ESC");
 return;
 }

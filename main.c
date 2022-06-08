@@ -15,6 +15,7 @@ extern int move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 
 extern int detection(int, int, int);			// x, y, ch 인자를 전달, 사용자의 다음 움직임이 어디로 움직일지를 판단.
 extern void printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
 extern void printBlank(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형 내의 공간을 모두 지워줌.
+extern void rank(int rank[], char player_name[]);
 
 // 미니게임
 extern int up_and_down_main();
@@ -41,7 +42,7 @@ int main(void) {
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
 	int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 
-	int rank[4] = { 0 }; // rank[0] = 학사 취득 학기 저장, rank[1] = 석사 취득 학기 저장, rank[2] = 박사 취득 학기 저장
+	int ranking[4] = { 0 }; // ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장
 	int ch;	// 사용자 움직임, 입력 주로 받는 변수
 	char letter;
 	char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
@@ -138,9 +139,14 @@ int main(void) {
 			break;
 		case 3:	// 플레이어 선택
 			break;
-		case 4:	// 개발자 모드
+		case 4:	// 개발자 모드 - 본 게임 완성 전까지 보류
 			break;
-		case 5:	// 졸업기록 열람
+		case 5:	// 졸업기록 열람 - 0609 구현 완료 - 실행되는지 확인요망
+			rank(ranking, player_name);
+			player_select_2 = _getch();
+			while (player_select_2 != 27) {
+				player_select_2 = _getch();
+			}
 			break;
 		case 6:	// 게임 종료
 			game_start = 0;
@@ -181,12 +187,14 @@ int main(void) {
 				for(int j = 0; j < size; j++)
 					map[i][j] = 0;
 			
-			// 게임 종료시 부분(whlie문 끝)
+			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
 			tm2 = time(NULL);
+			
 			// TODO - 미니게임 및 점수계산부분 추가
 			if (level == 1){
 				// 초급 - 업다운
 				minigame_result = up_and_down_main();
+
 			}
 			else if(level == 2){
 				// 중급 - 가위바위보
@@ -221,6 +229,7 @@ void gotoxy(int x, int y) {
 
 // 그냥 메뉴 출력해주는 것들 모아놓은 함수
 void menu(int n){
+
 	switch(n){
 		case 1:
 			//GAME START 혹은 게임이름으로 변경 필요...0530 완료
@@ -239,7 +248,7 @@ void menu(int n){
 			text_align_center(HOR, "##        ##  ##  #######   ##                   ##   ##   ##  ##   ##       ##  ##  \n");
 			text_align_center(HOR, "##        ######  ## # ##   ####                 ##   ##   ##  ##   ####     #####   \n");
 			text_align_center(HOR, "##  ###   ##  ##  ##   ##   ##                   ##   ##   ##  ##   ##       ####    \n");
-			text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##           ##  ##   ##    ####    ##  ##   ## ##   \n");
+			text_align_center(HOR, "##   ##   ##  ##  ##   ##   ##  ##               ##   ##    ####    ##  ##   ## ##   \n");
 			text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####      ##    #######   ###  ## \n");
 			break;
 		case 3:
@@ -256,8 +265,14 @@ void menu(int n){
 		case 4:
 			// player_select_1 -> case 1 게임 설명 부분
 			system("cls");
-			text_align_center(HOR, "게임 설명\n");	// 이름 오류 수정
-			//게임 설명 추가 요망
+			text_align_center(HOR, "게임 설명\n\n");	// 이름 오류 수정
+			// 0609 게임 설명 추가 완료  + 한글자씩 출력되도록 변경 가능 but, 복잡해짐.
+			
+			text_align_center(HOR, "\n\n 아주 오래전 한 대학생이 살고 있었다..... \n");
+			text_align_center(HOR, "그 학생은 박사 학위를 취득해 교수가 되고자 하는 원대한 꿈을 지니고 있었다.\n");
+			text_align_center(HOR, "학사, 석사, 박사를 거쳐 교수가 되기 위해서는 졸업논문을 작성해야 한다...\n");
+			text_align_center(HOR, "하지만 졸업논문을 작성할 때마다 뜻밖의 위기가 찾아오는데...\n");
+			text_align_center(HOR, "위기를 극복하고 무사히 박사 학위를 취득하도록 도와주자!\n");
 			text_align_center(HOR, "\n\n뒤로 가기 - ESC");
 			break;
 		case 5:

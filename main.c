@@ -149,7 +149,7 @@ int main(void) {
 					text_align_center(HOR, "잘못 입력하셨습니다.");
 					text_align_center(HOR, "다시 입력해주세요 : ");
 					scanf(" %d", &level);
-
+					continue;
 				}
 				text_align_center(HOR, "계속 진행하시겠습니까? (y - 게임시작 / n - 메뉴로 돌아가기/ r - 레벨 다시 고르기)\n");
 				ch = _getch();

@@ -36,6 +36,7 @@ int main(void) {
 	int game_start = 1;
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
+	int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 
 	int rank[4] = { 0 }; // rank[0] = 학사 취득 학기 저장, rank[1] = 석사 취득 학기 저장, rank[2] = 박사 취득 학기 저장
 	int ch;	// 사용자 움직임, 입력 주로 받는 변수
@@ -88,8 +89,8 @@ int main(void) {
 
 	// 메뉴 시작
 	while (game_start) {
-		int player_select_1, player_select_2;
-		main_game_start = 1;
+		
+		
 		system("cls");
 		
 		gotoxy(0, 12);
@@ -104,7 +105,7 @@ int main(void) {
 		scanf("%d", &player_select_1);
 
 		// 플레이어 메뉴 선택 입력 잘못되었을때 다시 받는 부분
-		while (player_select_1 < 1 || player_select_1 > 5) {
+		while (player_select_1 < 1 || player_select_1 > 6) {
 			system("cls");	// clear screen후 문자출력해야지 안그러면 다 지워진 후에 출력함.
 			gotoxy(0, 0);
 			text_align_center(HOR, "\n\n다시 입력해주세요.");
@@ -205,26 +206,28 @@ int main(void) {
 		// 	*p = 0;
 		// 	p++;
 		// }
-		for(int i = 0; i < size; i++)
-			for(int j = 0; j < size; j++)
-				map[i][j] = 0;
-		
-		// 게임 종료시 부분(whlie문 끝)
-		tm2 = time(NULL);
-		// TODO - 미니게임 및 점수계산부분 추가
-		if (level == 1){
-			// 초급 - 업다운
-			minigame_result = up_and_down_main();
+		if (main_game_start = 0){
+			for(int i = 0; i < size; i++)
+				for(int j = 0; j < size; j++)
+					map[i][j] = 0;
+			
+			// 게임 종료시 부분(whlie문 끝)
+			tm2 = time(NULL);
+			// TODO - 미니게임 및 점수계산부분 추가
+			if (level == 1){
+				// 초급 - 업다운
+				minigame_result = up_and_down_main();
+			}
+			else if(level == 2){
+				// 중급 - 가위바위보
+			}
+			else if(level == 3){
+				// 고급 - 공룡
+				minigame_result = jumping_man_main();
+			}
+			// 다시 main_game_start 초기화해줌
+			main_game_start = 1;
 		}
-		else if(level == 2){
-			// 중급 - 가위바위보
-		}
-		else if(level == 3){
-			// 고급 - 공룡
-			minigame_result = jumping_man_main();
-		}
-
-
 	}
 	return 0;
 }

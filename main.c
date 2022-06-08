@@ -1,6 +1,8 @@
 ﻿//main 함수
 #include "header.h"
 #define CHAR_LENGTH 1000
+#define BOX_HALF_12 12
+#define BOX_HALF_36 36
 // 내부정의 함수
 void text_align_center(int columns, char* text);
 void gotoxy(int x, int y);
@@ -26,6 +28,7 @@ const int max_x = 100;	// 플레이어 x, y 이동 범위 최대, 최소값
 const int min_x = 2;
 const int max_y = 51;
 const int min_y = 3;
+int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
@@ -69,39 +72,27 @@ int main(void) {
 		printf("%d...", 3 - i);
 		Sleep(1 * 1000);
 	}
-	system("cls");	// 주석추가
 
-
-	// 여기서 text_align_center 에 \n\n\n.. 담아놓으면 엔터키 출력 후 다음 줄 첫 번째 열로 이동함.
-	// TODO : 우리가 원하는 출력을 얻기 위해서는 앞에 이걸 붙여주면 됨.
-	
-	// TODO : 그리고 밑에 1. 게임설명 부분도 똑같이 처리 필요.
-	// 가장 좋은 방법은 gotoxy()로 좌표를 직접 입력해 주는것임.
-	
+	// 플레이어 이름 입력부분
+	system("cls");
 	gotoxy(0, 7);	// text_align_center 함수 쓸거면 x = 0 이어야함.
-	text_align_center(HOR, "플레이어의 이름을\n");
+	text_align_center(HOR, "플레이어의 이름을");
+	printf("\n");
 	text_align_center(HOR, "입력하세요.");
-
-	//Scanf 출력되는 지점 변경 필요 -> 해결
-	gotoxy(HOR/2, 10);
+	printSquare(HOR/2-BOX_HALF_36, 5, HOR/2+BOX_HALF_36, 11);
+	
+	// player name 입력하는 부분
+	printSquare(HOR/2-BOX_HALF_36, 13, HOR/2+BOX_HALF_36, 15);
+	gotoxy(HOR/2-BOX_HALF_36+2, 14);
 	scanf("%s", player_name);
 
 
 	// 메뉴 시작
 	while (game_start) {
 		
-		
 		system("cls");
-		
-		gotoxy(0, 12);
-		text_align_center(HOR, "1. 게임설명\n\n");
-		text_align_center(HOR, "2. 난이도 선택\n\n");
-		text_align_center(HOR, "3. 캐릭터 선택\n\n");
-		text_align_center(HOR, "4. 개발자 모드\n\n");
-		text_align_center(HOR, "5. 졸업기록 열람\n\n");
-		text_align_center(HOR, "6. 게임 종료\n\n");
-		printSquare(80, 10, 110, 35);
-		gotoxy(HOR/2, 30);
+		menu(3);	// 처음 메뉴 선택 부분
+
 		scanf("%d", &player_select_1);
 
 		// 플레이어 메뉴 선택 입력 잘못되었을때 다시 받는 부분
@@ -109,25 +100,14 @@ int main(void) {
 			system("cls");	// clear screen후 문자출력해야지 안그러면 다 지워진 후에 출력함.
 			gotoxy(0, 0);
 			text_align_center(HOR, "\n\n다시 입력해주세요.");
-			gotoxy(0, 12);
-			text_align_center(HOR, "1. 게임설명\n\n");
-			text_align_center(HOR, "2. 난이도 선택\n\n");
-			text_align_center(HOR, "3. 캐릭터 선택\n\n");
-			text_align_center(HOR, "4. 개발자 모드\n\n");
-			text_align_center(HOR, "5. 졸업기록 열람\n\n\n");
-			text_align_center(HOR, "6. 게임 종료\n\n");
-			printSquare(80, 10, 110, 35);
-			gotoxy(HOR/2, 30);
+			menu(3);	// 메뉴 출력
 			scanf("%d", &player_select_1);
 		}
 
 		// 메뉴 선택별 케이스.
 		switch (player_select_1) {
 		case 1:	// 게임 설명
-			system("cls");
-			text_align_center(HOR, "게임 설명\n");	// 이름 오류 수정
-			//게임 설명 추가 요망
-			text_align_center(HOR, "\n\n뒤로 가기 - ESC");
+			menu(4);				// menu case 4에 가서 게임 설명 추가할 것.
 			player_select_2 = _getch();
 			while (player_select_2 != 27) {
 				player_select_2 = _getch();
@@ -141,26 +121,16 @@ int main(void) {
 				gotoxy(HOR / 2, 12);
 				scanf(" %d", &level);
 
-
-				switch (level) {
-				case 1:
-					text_align_center(HOR, "[ 초급 ] 난이도를 선택하셨습니다.\n");
-					break;
-				case 2:
-					text_align_center(HOR, "[ 중급 ] 난이도를 선택하셨습니다.");
-					break;
-				case 3:
-					text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
-					break;
-				default:
+				while(level != 1 && level != 2 && level != 3){
 					text_align_center(HOR, "잘못 입력하셨습니다.");
 					text_align_center(HOR, "다시 입력해주세요 : ");
 					scanf(" %d", &level);
-					continue;
 				}
+				menu(level + 4);
 				text_align_center(HOR, "계속 진행하시겠습니까? (y - 게임시작 / n - 메뉴로 돌아가기/ r - 레벨 다시 고르기)\n");
 				ch = _getch();
 			} while (ch == 'r');
+
 			if (ch == 'n') {
 				system("cls");
 				continue;
@@ -254,7 +224,6 @@ void menu(int n){
 	switch(n){
 		case 1:
 			//GAME START 혹은 게임이름으로 변경 필요...0530 완료
-
 			gotoxy(0, 10);
 			text_align_center(HOR, " #####      ##    ##   ##  #######                #####   ########    ##      ######  ########");
 			text_align_center(HOR, "##   ##    ####   ### ###   ##  ##               ##   ##  #  ##  #   ####     ##  ##  #  ##  #");
@@ -274,10 +243,39 @@ void menu(int n){
 			text_align_center(HOR, " #####    ##  ##  ##   ##  #######                #####      ##    #######   ###  ## \n");
 			break;
 		case 3:
-
+			gotoxy(0, 12);
+			text_align_center(HOR, "1. 게임설명\n\n");
+			text_align_center(HOR, "2. 난이도 선택\n\n");
+			text_align_center(HOR, "3. 캐릭터 선택\n\n");
+			text_align_center(HOR, "4. 개발자 모드\n\n");
+			text_align_center(HOR, "5. 졸업기록 열람\n\n");
+			text_align_center(HOR, "6. 게임 종료\n\n");
+			printSquare(80, 10, 110, 35);
+			gotoxy(HOR/2, 30);
 			break;
-		
+		case 4:
+			// player_select_1 -> case 1 게임 설명 부분
+			system("cls");
+			text_align_center(HOR, "게임 설명\n");	// 이름 오류 수정
+			//게임 설명 추가 요망
+			text_align_center(HOR, "\n\n뒤로 가기 - ESC");
+			break;
+		case 5:
+			// case 2 -> 난이도 선택 부분
+			// level == 1
+			text_align_center(HOR, "[ 초급 ] 난이도를 선택하셨습니다.\n");
+			break;
+		case 6:
+			// level == 2
+			text_align_center(HOR, "[ 중급 ] 난이도를 선택하셨습니다.");
+			break;
+		case 7:
+			// level == 3
+			text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
+			break;
 		default:
+			gotoxy(0, 0);
+			printf("MENU FUNCTION ERROR\n");
 			break;
 	}
 	return;

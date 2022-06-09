@@ -48,11 +48,13 @@ int up_and_down_main()
 
 	if (i > DEFAULT){
 		printf("총 %d번 시도하였으므로 졸업 학기가 %d(학사 난이도에 맞게 단위 수정)만큼 추가됩니다...\n", i, i - DEFAULT);
+		Sleep("3000");	// 너무 빨리 종료되어서 sleep 추가
 		return (i - 5);
 	
 	}
 	else {
 		printf("총 %d번만에 게임을 클리어했으므로 졸업 학기가 추가되지 않습니다.\n", i);
+		Sleep("3000");
 		return 0; // if문 때문에 일단은 i문으로 값을 반환시킴. 이후 main에서 추가학기를 따로 계산해주면 됨! 
 				  //0609 -> return값을 조건에 따라 다르게 넣어서 따로 main에서 계산할 필요 없음.
 	}

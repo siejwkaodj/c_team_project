@@ -3,6 +3,11 @@ extern int detection(int*, int*, int);
 extern void printText(char*, int, int);  // printMap.c에 있음. -> 기본위치 107, 12정도
 extern void printBlank(int, int, int, int);
 
+// 전역변수
+extern int size;
+extern int first_line;
+extern int map[50][50];
+
 // 사용자 위치 배열에서 움직이는 함수
 void professor();
 void flag_effect();
@@ -18,22 +23,26 @@ int move(int *x, int *y, int ch){
             break;
         // 장애물, 칸 범위 넘어가도 장애물 판정.
         case 2:
-            printText("                                                            ",107, 12);
-            printText("너는 못 지나간다", 107, 12);
+            printBlank(107, first_line, 180, first_line);
+            printText("너는 못 지나간다", 107, first_line);
             break;
         // 교수
         case 3:
+            map[ty][tx] = 0;    // 맵 이부분 초기화 해줘야함.
+            *x = tx;
+            *y = ty;
             professor();
             break;
         // 깃발
         case 4:
+            map[ty][tx] = 0;
             flag_effect();
             *x = tx;
             *y = ty;
             break;
         // 보물
         case 5:
-            printText("게임 승리!", 107, 12);
+            printText("게임 승리!", 107, first_line);
             for(int i = 0; i < 3; i++){
                 gotoxy(107, 13);
                 sprintf(text, "Ending in %d...", 3-i);
@@ -50,11 +59,10 @@ int move(int *x, int *y, int ch){
 }
 // 깃발 보물 아닌거 먹었을 때 랜덤 효과 나오는거 -> 추가 필요
 void flag_effect(){
-    int temp = rand() % 10;
-    printText("                                                            ",107, 12);  // 지우기
-    if (temp == 0){
+    int temp = rand() % 10;         // temp에 랜덤으로 나올 효과 지정.
+    printBlank(107, 13, 180, 13);   // 지우기
+    if (temp == 0)
         printText("꽝!",107, 12);
-    }
     else if(temp == 1){
 
     }
@@ -66,7 +74,8 @@ void professor(){
     int pre_t = 0;
     char text[1000];
     unsigned int st = time(NULL), endt;
-    printText("                                                            ",107, 12);
+    printBlank(107, 12, 180, 12);   // 이전 메세지 지우기
+    
     printText("앗 교수님한테 걸렸습니다", 107, 12);
     printText("3초동안 움직이지 못합니다.", 107, 13);
     endt = time(NULL);

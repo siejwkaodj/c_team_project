@@ -29,6 +29,7 @@ const int max_x = 100;	// 플레이어 x, y 이동 범위 최대, 최소값
 const int min_x = 2;
 const int max_y = 51;
 const int min_y = 3;
+const int first_line = 13;
 int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
@@ -41,6 +42,7 @@ int main(void) {
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
 	int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
+	int player_shape = 0; 			// 사용자 모양 바꿔주는 변수
 
 	int ranking[4] = { 0 }; // ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장
 	int ch;	// 사용자 움직임, 입력 주로 받는 변수
@@ -93,7 +95,7 @@ int main(void) {
 		
 		system("cls");
 		menu(3);	// 처음 메뉴 선택 부분
-
+		gotoxy(HOR/2, 30);
 		scanf("%d", &player_select_1);
 
 		// 플레이어 메뉴 선택 입력 잘못되었을때 다시 받는 부분
@@ -138,6 +140,54 @@ int main(void) {
 			}
 			break;
 		case 3:	// 플레이어 선택
+			do{
+				system("cls");
+				gotoxy(0, 4);
+				text_align_center(HOR, "마음에 드는 모양을 선택하세요 (0~ 5 입력)");
+
+				gotoxy(0, 7);
+				text_align_center(HOR, "0 - ◈");
+				text_align_center(HOR, "1 - ◇");
+				text_align_center(HOR, "2 - ◆");
+				text_align_center(HOR, "3 - 엄");
+				text_align_center(HOR, "4 - 준");
+				text_align_center(HOR, "5 - 식");
+				
+				printSquare(HOR/2-BOX_HALF_36, 2, HOR/2+BOX_HALF_36, 20);
+				
+				gotoxy(HOR/2, 18);
+				scanf("%d", &player_shape);
+				while(player_shape < 0 || player_shape > 5){
+					printf("\b\b\b   ");
+					gotoxy(0, 30);
+					text_align_center(HOR, "잘못 입력하셨습니다.");
+					text_align_center(HOR, "다시 입력해주세요 : ");
+					
+					gotoxy(HOR/2, 18);
+					scanf(" %d", &player_shape);
+				}
+
+				printBlank(0, 30, 180, 30);
+				printBlank(0, 31, 180, 31);
+				gotoxy(0, 23);
+				text_align_center(HOR, "선택한 모양은 다음과 같습니다.");
+
+				if(player_shape == 0)
+					printText("◈", HOR/2, 25);
+				else if(player_shape == 1)
+					printText("◇", HOR/2, 25);
+				else if(player_shape == 2)
+					printText("◆", HOR/2, 25);
+				else if(player_shape == 3)
+					printText("엄", HOR/2, 25);
+				else if(player_shape == 4)
+					printText("준", HOR/2, 25);
+				else if(player_shape == 5)
+					printText("식", HOR/2, 25);
+				gotoxy(0, 27);
+				text_align_center(HOR, "계속 진행하시겠습니까? (끝내려면 아무 키나 눌러주세요 / r - 모양 다시 고르기)\n");
+				ch = _getch();
+			}while(ch == 'r');
 			break;
 		case 4:	// 개발자 모드 - 본 게임 완성 전까지 보류
 			break;
@@ -163,8 +213,20 @@ int main(void) {
 			tm1 = time(NULL); // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함. -> 완료
 			while (main_game_start) {
 				gotoxy(x, y);
-				printf("◈\b\b");			// 주인공 문자 출력 부분
-				
+				if(player_shape == 0)
+					printf("◈\b\b");			// 주인공 문자 출력 부분
+				else if(player_shape == 1)
+					printf("◇\b\b");			// 주인공 문자 출력 부분
+				else if(player_shape == 2)
+					printf("◆\b\b");			// 주인공 문자 출력 부분
+				else if(player_shape == 3)
+					printf("엄\b\b");			// 주인공 문자 출력 부분
+				else if(player_shape == 4)
+					printf("준\b\b");			// 주인공 문자 출력 부분
+				else if(player_shape == 5)
+					printf("식\b\b");			// 주인공 문자 출력 부분
+				else
+					printText("ERROR : PLAYER_SHAPE\n", 0, 0);
 				sprintf(text, "좌표 : %d, %d ", x/2, y);
 				gotoxy(107, 14);
 				printf("%s", text);
@@ -182,14 +244,14 @@ int main(void) {
 		// 	*p = 0;
 		// 	p++;
 		// }
-		if (main_game_start = 0){
+		if (main_game_start == 0){
 			for(int i = 0; i < size; i++)
 				for(int j = 0; j < size; j++)
 					map[i][j] = 0;
 			
 			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
 			tm2 = time(NULL);
-			
+			system("cls");
 			// TODO - 미니게임 및 점수계산부분 추가
 			if (level == 1){
 				// 초급 - 업다운
@@ -259,8 +321,8 @@ void menu(int n){
 			text_align_center(HOR, "4. 개발자 모드\n\n");
 			text_align_center(HOR, "5. 졸업기록 열람\n\n");
 			text_align_center(HOR, "6. 게임 종료\n\n");
-			printSquare(80, 10, 110, 35);
-			gotoxy(HOR/2, 30);
+			printSquare(HOR/2-15, 10, HOR/2+15, 35);
+			
 			break;
 		case 4:
 			// player_select_1 -> case 1 게임 설명 부분
@@ -289,8 +351,7 @@ void menu(int n){
 			text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
 			break;
 		default:
-			gotoxy(0, 0);
-			printf("MENU FUNCTION ERROR\n");
+			printText("ERROR : MENU FUNCTION\n", 0, 0);
 			break;
 	}
 	return;

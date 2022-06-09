@@ -19,15 +19,15 @@ void printMap() {
 	printSquare(min_x-2, min_y-1, max_x+2, max_y+1);
 	
 	// 부가정보 출력; 입력문구, 1줄띔, 경계까지 고려해 y = 3에 출력
-	printSquare(105, 1, 188, 9);
+	printSquare(105, 2, 188, 10);
 
-	printText("□ : 빈칸", 107, 3);
-	printText("◈ : 플레이어", 107, 4);
-	printText("▩ : 장애물", 107, 5);
-	printText("◎ : 교수", 107, 6);
-	printText("▶ : 깃발", 107, 7);
+	printText("□ : 빈칸", 107, 4);
+	printText("◈ : 플레이어", 107, 5);
+	printText("▩ : 장애물 -> 지나가지 못합니다.", 107, 6);
+	printText("◎ : 교수   -> 만나면 3초간 움직이지 못합니다.", 107, 7);
+	printText("▶ : 깃발   -> 획득하면 보물 혹은 랜덤한 이벤트가 발생합니다. ", 107, 8);
 	// 부가정보 감싸는 사각형 출력
-	printSquare(105, 11, 188, 52);
+	printSquare(105, 12, 188, 52);
 
 	for (int i = 0; i < size - 1; i++) {		// 출력시 경계 조심
 		for (int j = 0; j < size - 1; j++) {	// size-2 만큼 출력; 깃발 생성시에도 맨 모서리 부분에는 생성 x
@@ -37,9 +37,9 @@ void printMap() {
 				//printf("%2d", map[i][j]);
 				printf("  ");				// **또는 띄어쓰기 2칸(가로는 2배)
 				break;
-			case 1:		// 플레이어
-				printf("◈");
-				break;
+			// case 1:		// 플레이어
+			// 	printf("◈");
+			// 	break;
 			case 2:		// 장애물
 				printf("▩");
 				break;

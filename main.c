@@ -3,6 +3,7 @@
 #define CHAR_LENGTH 1000
 #define BOX_HALF_12 12
 #define BOX_HALF_36 36
+
 // 내부정의 함수
 void text_align_center(int columns, char* text);
 void gotoxy(int x, int y);
@@ -10,40 +11,40 @@ void menu(int);
 
 // 외부정의 함수
 extern void printMap();							// 맵 출력하는 함수
-extern void flag(int level);						// 맵에 랜덤으로 깃발, 장애물 등을 배치하는 함수. 난이도 받아서 장애물 개수 등 설정.
+extern void flag(int level);					// 맵에 랜덤으로 깃발, 장애물 등을 배치하는 함수. 난이도 받아서 장애물 개수 등 설정.
 extern int move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 위치를 움직임. detection 사용됨.
 extern int detection(int, int, int);			// x, y, ch 인자를 전달, 사용자의 다음 움직임이 어디로 움직일지를 판단.
-extern void printSquare(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
+extern void printSquare(int, int, int, int);	// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
 extern void printBlank(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형 내의 공간을 모두 지워줌.
 extern void rank(int rank[], char player_name[]);
 
 // 미니게임
-extern int up_and_down_main();
-extern int rock_scissors_paper();
-extern void print_point();
-extern int jumping_man_main();
+extern int up_and_down_main();		// 미니게임 1
+extern int rock_scissors_paper();	// 미니게임 2
+extern void print_point();			// 미니게임 2 결과 출력 함수
+extern int jumping_man_main();		// 미니게임 3
 
 // 전역변수
-int map[50][50] = { 0 };	// 일단 전부 0으로 초기화
+int map[50][50] = { 0 };			// 장애물, 교수, 깃발 등 위치정보 저장하는 배열, 일단 전부 0으로 초기화
 const int HOR = 190;
-const int size = 50;	// 맵 크기 설정
-const int max_x = 100;	// 플레이어 x, y 이동 범위 최대, 최소값
+const int size = 50;				// 맵 크기 설정해주는 상수
+const int max_x = 100;				// 플레이어 x, y 이동 범위 최대, 최소값
 const int min_x = 2;
 const int max_y = 51;
 const int min_y = 3;
-const int first_line = 13;
-const int p_x_speed = 2;
+const int first_line = 13;			// 화면 안내문 출력하는 첫째줄
+const int p_x_speed = 2;			// 사용자 x속도, y속도
 const int p_y_speed = 1;
-time_t tm1, tm2; // 게임 시간 받는 변수	
+time_t tm1, tm2; 					// 게임 시간 받는 변수	
 int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 int professor_location[20][2] = { 0 };	// 교수님 위치 저장하는 배열, 인원 크기보다 적을 시 나머지 공간엔 0 할당. 10 / 15 / 20명.
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
-	int i = 0;			// 임시 반복 변수
-	int *p;				// 임시 포인터 변수
-	int x = 40, y = 12;	// 플레이어 위치
-	int level = 0;			// 난이도 - 1 (초급), 2 (중급), 3 (고급)
-	int game_start = 1;
+	int i = 0;						// 임시 반복 변수
+	int *p;							// 임시 포인터 변수
+	int x = 40, y = 12;				// 플레이어 위치 저장하는 변수
+	int level = 0;					// 난이도 - 1 (초급), 2 (중급), 3 (고급)
+	int game_start = 1;				// 메뉴부터 시작해서 전체 while문 반복 조절하는 변수
 	int main_game_start = 1;		// 게임 끝났는지 확인해주는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
 	int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
@@ -96,7 +97,7 @@ int main(void) {
 
 	// 메뉴 시작
 	while (game_start) {
-		
+					// 메뉴부터 시작해서 	
 		system("cls");
 		menu(3);	// 처음 메뉴 선택 부분
 		gotoxy(HOR/2, 30);

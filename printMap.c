@@ -43,8 +43,8 @@ void printMap() {
 			case 2:		// 장애물
 				printf("▩");
 				break;
-			case 3:		// 교수, 임시로 설정
-				printf("◎");
+			case 3:		// 교수
+				printf("교");
 				break;
 			case 4:		// 깃발 및 보물
 			case 5:

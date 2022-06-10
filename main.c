@@ -19,6 +19,7 @@ extern void rank(int rank[], char player_name[]);
 
 // 미니게임
 extern int up_and_down_main();
+extern void print_point();
 extern int jumping_man_main();
 
 // 전역변수
@@ -30,8 +31,11 @@ const int min_x = 2;
 const int max_y = 51;
 const int min_y = 3;
 const int first_line = 13;
+const int p_x_speed = 2;
+const int p_y_speed = 1;
+time_t tm1, tm2; // 게임 시간 받는 변수	
 int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
-
+int professor_location[20][2] = { 0 };	// 교수님 위치 저장하는 배열, 인원 크기보다 적을 시 나머지 공간엔 0 할당. 10 / 15 / 20명.
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
 	int i = 0;			// 임시 반복 변수
@@ -50,7 +54,6 @@ int main(void) {
 	char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
 	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수
 	
-	time_t tm1, tm2; // 게임 시간 받는 변수	
 	
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
@@ -141,20 +144,17 @@ int main(void) {
 			break;
 		case 3:	// 플레이어 선택
 			do{
+				// 플레이어 선택 메뉴 출력
 				system("cls");
 				gotoxy(0, 4);
 				text_align_center(HOR, "마음에 드는 모양을 선택하세요 (0~ 5 입력)");
 
 				gotoxy(0, 7);
-				text_align_center(HOR, "0 - ◈");
-				text_align_center(HOR, "1 - ◇");
-				text_align_center(HOR, "2 - ◆");
-				text_align_center(HOR, "3 - 엄");
-				text_align_center(HOR, "4 - 준");
-				text_align_center(HOR, "5 - 식");
-				
+				menu(14);	// 모양 출력
+				// 박스 출력
 				printSquare(HOR/2-BOX_HALF_36, 2, HOR/2+BOX_HALF_36, 20);
 				
+				// 잘못 입력시 경고문구 출력부분
 				gotoxy(HOR/2, 18);
 				scanf("%d", &player_shape);
 				while(player_shape < 0 || player_shape > 5){
@@ -166,24 +166,16 @@ int main(void) {
 					gotoxy(HOR/2, 18);
 					scanf(" %d", &player_shape);
 				}
-
+				// 경고문구 삭제 및 선택 모양 알림 문구 출력
 				printBlank(0, 30, 180, 30);
 				printBlank(0, 31, 180, 31);
 				gotoxy(0, 23);
 				text_align_center(HOR, "선택한 모양은 다음과 같습니다.");
-
-				if(player_shape == 0)
-					printText("◈", HOR/2, 25);
-				else if(player_shape == 1)
-					printText("◇", HOR/2, 25);
-				else if(player_shape == 2)
-					printText("◆", HOR/2, 25);
-				else if(player_shape == 3)
-					printText("엄", HOR/2, 25);
-				else if(player_shape == 4)
-					printText("준", HOR/2, 25);
-				else if(player_shape == 5)
-					printText("식", HOR/2, 25);
+				
+				// 선택 모양 출력 부분
+				if(player_shape >= 0 || player_shape < 7)
+					menu(player_shape + 15);
+				// 메뉴 종료 알림문구 출력부분
 				gotoxy(0, 27);
 				text_align_center(HOR, "계속 진행하시겠습니까? (끝내려면 아무 키나 눌러주세요 / r - 모양 다시 고르기)\n");
 				ch = _getch();
@@ -212,47 +204,41 @@ int main(void) {
 			printMap();
 			tm1 = time(NULL); // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함. -> 완료
 			while (main_game_start) {
+				// 주인공 문자 출력 부분
 				gotoxy(x, y);
-				if(player_shape == 0)
-					printf("◈\b\b");			// 주인공 문자 출력 부분
-				else if(player_shape == 1)
-					printf("◇\b\b");			// 주인공 문자 출력 부분
-				else if(player_shape == 2)
-					printf("◆\b\b");			// 주인공 문자 출력 부분
-				else if(player_shape == 3)
-					printf("엄\b\b");			// 주인공 문자 출력 부분
-				else if(player_shape == 4)
-					printf("준\b\b");			// 주인공 문자 출력 부분
-				else if(player_shape == 5)
-					printf("식\b\b");			// 주인공 문자 출력 부분
+				if(player_shape >= 0 || player_shape < 7)
+					menu(player_shape + 8);	
 				else
 					printText("ERROR : PLAYER_SHAPE\n", 0, 0);
+				
+				// 좌표 출력
 				sprintf(text, "좌표 : %d, %d ", x/2, y);
 				gotoxy(107, 14);
 				printf("%s", text);
 				//printText("좌표 : ", 107, 14);
 
+				// 다음 문자 부분
 				ch = _getch();
 				gotoxy(x, y);
 				printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
 				main_game_start = move(&x, &y, ch);	// x, y, ch 받아 사용자 위치 움직이는 부분
 			}
 		}
-		// 게임 종료시 map 0으로 초기화 -> 포인터 쓰니까 자꾸 오류남
-		// p = &map[0][0];
-		// while ((int)(&map[size-1][size-1] - p) < size * size){
-		// 	*p = 0;
-		// 	p++;
-		// }
+		// 메인게임 종료 및 미니게임 시작
 		if (main_game_start == 0){
-			for(int i = 0; i < size; i++)
-				for(int j = 0; j < size; j++)
-					map[i][j] = 0;
-			
 			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
 			tm2 = time(NULL);
 			system("cls");
-			// TODO - 미니게임 및 점수계산부분 추가
+			for(int i = 0; i < size; i++)
+				for(int j = 0; j < size; j++)
+					map[i][j] = 0;
+			// p = &map[0][0];
+			// while ((int)(&map[size-1][size-1] - p) < size * size){
+			// 	*p = 0;
+			// 	p++;
+			// }
+			
+			// TODO - 미니게임 점수계산부분 추가
 			if (level == 1){
 				// 초급 - 업다운
 				minigame_result = up_and_down_main();
@@ -260,13 +246,15 @@ int main(void) {
 			}
 			else if(level == 2){
 				// 중급 - 가위바위보
-			}
+			}	minigame_result = print_point();
 			else if(level == 3){
 				// 고급 - 공룡
 				minigame_result = jumping_man_main();
 			}
 			// 다시 main_game_start 초기화해줌
 			main_game_start = 1;
+
+			// 점수 현황 출력 및 다음 게임 난이도 선택 부분
 		}
 	}
 	return 0;
@@ -291,7 +279,6 @@ void gotoxy(int x, int y) {
 
 // 그냥 메뉴 출력해주는 것들 모아놓은 함수
 void menu(int n){
-
 	switch(n){
 		case 1:
 			//GAME START 혹은 게임이름으로 변경 필요...0530 완료
@@ -349,6 +336,53 @@ void menu(int n){
 		case 7:
 			// level == 3
 			text_align_center(HOR, "[ 고급 ] 난이도를 선택하셨습니다.");
+			break;
+		case 8:
+			// 주인공 문자 출력 부분
+			printf("◈\b\b");			
+			break;
+		case 9:
+			printf("◇\b\b");
+			break;
+		case 10:
+			printf("◆\b\b");
+			break;
+		case 11:
+			printf("엄\b\b");
+			break;
+		case 12:
+			printf("준\b\b");
+			break;
+		case 13:
+			printf("식\b\b");
+			break;
+		case 14:
+			// 메뉴 - 3 : 플레이어 모양 선택 부분
+			text_align_center(HOR, "0 - ◈");
+			text_align_center(HOR, "1 - ◇");
+			text_align_center(HOR, "2 - ◆");
+			text_align_center(HOR, "3 - 엄");
+			text_align_center(HOR, "4 - 준");
+			text_align_center(HOR, "5 - 식");
+			break;
+		case 15:
+			// 메뉴 - 3 플레이어 모양 선택 확인 부분
+			printText("◈", HOR/2, 25);
+			break;
+		case 16:
+			printText("◇", HOR/2, 25);
+			break;
+		case 17:
+			printText("◆", HOR/2, 25);
+			break;
+		case 18:
+			printText("엄", HOR/2, 25);
+			break;
+		case 19:
+			printText("준", HOR/2, 25);
+			break;
+		case 20:
+			printText("식", HOR/2, 25);
 			break;
 		default:
 			printText("ERROR : MENU FUNCTION\n", 0, 0);

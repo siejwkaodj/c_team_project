@@ -39,7 +39,7 @@ const int p_y_speed = 1;
 time_t tm1, tm2; 					// 게임 시간 받는 변수	
 int level = 1;					// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
-int player_shape = 0; 			// 사용자 모양 바꿔주는 변수
+int player_shape = 0; 			// 사용자 모양 바꿔주는 변수, 0~5
 int professor_location[20][2] = { 0 };	// 교수님 위치 저장하는 배열, 인원 크기보다 적을 시 나머지 공간엔 0 할당. 10 / 15 / 20명.
 int ranking[4] = { 0 }; // ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장
 char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
@@ -287,21 +287,28 @@ int main(void) {
 			
 			// 점수 현황 출력 및 다음 게임 난이도 선택 부분
 			system("cls");
-			menu(22);
-			level++;
-			ch = _getch();
-			if(ch == 'n'){
-				// 메뉴로 이동
-				player_select_1 = 0;
+			if(level < 3){
+				menu(22);
+				level++;
+				ch = _getch();
+				if(ch == 'n'){
+					// 메뉴로 이동
+					player_select_1 = 0;
+				}
+				else{
+					// 다음 게임 바로 시작
+					system("cls");
+					loading(25);
+					player_select_1 = 7;
+				}
+				// 다시 main_game_running 초기화해줌
+				main_game_running = 1;
 			}
 			else{
-				// 다음 게임 바로 시작
-				system("cls");
-				loading(25);
-				player_select_1 = 7;
+				// 3단계 미니게임 클리어 -> 게임 엔딩 추가
+				rank(ranking, player_name);
+				level = 1;	// 다시 레벨 초기화 -> 처음부터 할 수 있게
 			}
-			// 다시 main_game_running 초기화해줌
-			main_game_running = 1;
 		}
 	}
 	return 0;

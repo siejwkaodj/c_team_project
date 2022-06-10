@@ -19,6 +19,7 @@ extern void rank(int rank[], char player_name[]);
 
 // 미니게임
 extern int up_and_down_main();
+extern int rock_scissors_paper();
 extern void print_point();
 extern int jumping_man_main();
 
@@ -246,7 +247,10 @@ int main(void) {
 			}
 			else if(level == 2){
 				// 중급 - 가위바위보
-			}	minigame_result = print_point();
+				// minigame_result = 
+				minigame_result = rock_scissors_paper();
+				print_point(minigame_result);
+			}	
 			else if(level == 3){
 				// 고급 - 공룡
 				minigame_result = jumping_man_main();

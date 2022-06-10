@@ -1,10 +1,10 @@
 ﻿#include "header.h"
 #define SET 5
-// �ʱް��� - ����������
-// �� 5ȸ ����, 8�� �̸� --> �г�Ƽ �ο�. (1�� �� 1�б� ����)
-// ���̵��� �°� printf�� �����ؾ���...(���� ������ �ٸ��Ƿ�)
+// 초급게임 - 가위바위보
+// 총 5회 시행, 8점 미만 --> 패널티 부여. (1점 당 1학기 유예)
+// 난이도에 맞게 printf를 수정해야함...(점수 단위가 다르므로)
 
-int set_random() // ������ ���������� ���� ����
+int set_random() // 교수님 가위바위보 랜덤 생성
 {
 	int x;
 	srand(time(NULL));
@@ -12,7 +12,7 @@ int set_random() // ������ ���������� ����
 	return x;
 }
 
-int decision(int x, int y) // ���� �ǵ�
+int decision(int x, int y) // 승패 판독
 {
 	int result;
 
@@ -26,56 +26,56 @@ int decision(int x, int y) // ���� �ǵ�
 	return result;
 }
 
-int print_result(int z) // ���п� ���� ���� ȹ��
+int print_result(int z) // 승패에 따른 점수 획득
 {
 	int point = 0;
 	switch (z)
 	{
 	case 0:
-		printf("���º��Դϴ�.\n2���� �߰��˴ϴ�.\n");
+		printf("무승부입니다.\n2점이 추가됩니다.\n");
 		point += 2;
 		break;
 	case 1:
-		printf("�������� �̰���ϴ�!\n3���� �߰��˴ϴ�.\n");
+		printf("교수님을 이겼습니다!\n3점이 추가됩니다.\n");
 		point += 3;
 		break;
 	case 2:
-		printf("�������� �̰���ϴ�...\n1���� �߰��˴ϴ�.\n");
+		printf("교수님이 이겼습니다...\n1점이 추가됩니다.\n");
 		point += 1;
 		break;
 	}
 	return point;
 }
 
-int get_input() // ���������� �� �Է� 
+int get_input() // 가위바위보 값 입력 
 {
 	int x;
-	printf("���������� ������ �����ϰڽ��ϴ�!\n�ּ��� ���� �������� �̰ܺ�����!\n");
-	printf("�¸� �� 3��, ���º� �� 2��, �й� �� 1���� �����˴ϴ�!\n\n");
-	printf("�� 5���� ��ȸ�� �־�����, 8���� ���� ���� �� 1�� �� �� �б� ������ �ʰ� �մϴ�...\n");
+	printf("가위바위보 게임을 시작하겠습니다!\n최선을 다해 교수님을 이겨보세요!\n");
+	printf("승리 시 3점, 무승부 시 2점, 패배 시 1점이 적립됩니다!\n\n");
+	printf("총 5번의 기회가 주어지며, 8점을 넘지 못할 시 1점 당 한 학기 졸업을 늦게 합니다...\n");
 	do
 	{
-		printf("\n������ ����� ? (���� : 0, ���� : 1, �� : 2) : ");
+		printf("\n무엇을 낼까요 ? (가위 : 0, 바위 : 1, 보 : 2) : ");
 		scanf("%d", &x);
 		if (x != 0 && x != 1 && x != 2)
-			printf("�߸��� ���� �Է��Ͽ����ϴ�. �ٽ� �Է����ּ���!");
+			printf("잘못된 값을 입력하였습니다. 다시 입력해주세요!");
 	} while (x != 0 && x != 1 && x != 2);
 
 	return x;
 }
 
-int rock_scissors_paper() // ���� �ݺ� (�� 5ȸ), main.c�� point�� ��ȯ����� ��!
+int rock_scissors_paper() // 게임 반복 (총 5회), main.c에 point값 반환해줘야 함!
 {
 	int professor, user, result;
 	int point = 0;
 	int i = 0;
 	do
 	{
-		professor = set_random(); // 0 ~ 2 ������ ������ ��ȯ
-		user = get_input(); // ����� �Է� ������ ��ȯ
-		printf("\n������ : %d, �� : %d\n", professor, user);
-		result = decision(professor, user); // ���º� (0), ����� �¸�(1), ������ �¸�(2) ��ȯ
-		point += print_result(result); // ���п� ���� �ش� ���ڿ� ���, switch�� Ȱ��
+		professor = set_random(); // 0 ~ 2 사이의 랜덤값 반환
+		user = get_input(); // 사용자 입력 정수값 반환
+		printf("\n교수님 : %d, 나 : %d\n", professor, user);
+		result = decision(professor, user); // 무승부 (0), 사용자 승리(1), 교수님 승리(2) 반환
+		point += print_result(result); // 승패에 따라서 해당 문자열 출력, switch문 활용
 		i++;
 		Sleep(1500);
 		system("cls");
@@ -83,16 +83,13 @@ int rock_scissors_paper() // ���� �ݺ� (�� 5ȸ), main.c�� po
 	return point;
 }
 
-void print_point() //���� ��� (�̴ϰ��� ȭ�鿡�� ����� ���, ���� ������ rock_scissors_paper()�� ���ؼ� main.c�� ��ȯ)
+void print_point(int point) //총점 출력 (미니게임 화면에서 결과를 출력, 실제 점수는 rock_scissors_paper()를 통해서 main.c에 반환)
 {
-	int point = 0;
-
-	point = rock_scissors_paper();
-
-	printf("���� : %d\n", point);
+	printf("총점 : %d\n", point);
 
 	if (point > 8)
-		printf("������ 8�� �̻��̹Ƿ� ������ �������� �ʽ��ϴ�! �����մϴ�~\n");
+		printf("총점이 8점 이상이므로 졸업이 유예되지 않습니다! 축하합니다~\n");
 	else
-		printf("������ 8�� �̸��̹Ƿ� %d�б⸸ŭ ������ �����˴ϴ�...\n", 8 - point);
+		printf("총점이 8점 미만이므로 %d학기만큼 졸업이 유예됩니다...\n", 8 - point);
+	return;
 }

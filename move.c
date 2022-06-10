@@ -68,7 +68,7 @@ void flag_effect(){
     int st = time(NULL);
     printBlank(107, first_line, 180, first_line);   // 첫줄 지우기
     // 긍정적 효과
-    /*
+    
     if (temp == 0){
         // 잠시동안 보물의 위치 보여줌
         printText("잠시동안 보물의 위치가 드러납니다", 107, first_line);
@@ -90,21 +90,28 @@ void flag_effect(){
         p_y_speed *= 2;
     }
     else if(temp == 3)
-        printText("", );
+        printText("찢어진 논문을 발견했습니다... 가슴이 아픕니다.",107, first_line);
     else if(temp == 4)
-        printText("", );
+        printText("찢어진 논문을 발견했습니다... 가슴이 아픕니다.",107, first_line);
     
     // 부정적 효과
     else if(temp == 5)
         printText("찢어진 논문을 발견했습니다... 가슴이 아픕니다.",107, first_line);
-    else if(temp == 6)
-        
-    else if(temp == 7)
-        
+    else if(temp == 6){
+        // 방향 좌우 / 상하 / 상하좌우 반전
+        printText("너무 오랬동안 밤을 샜습니다.",107, first_line+5);
+        printText("잠시동안 어지러워서 방향감각이 사라집니다.",107, first_line+6);
+
+    }
+    else if(temp == 7){
+        // 모든 깃발, 교수 아이콘 사라지게 함.
+        printText("너무 오랬동안 밤을 샜습니다.",107, first_line+5);
+        printText("잠시동안 앞이 보이지 않습니다.",107, first_line+5);
+    }
     else if(temp == 8)
-        
+        printText("찢어진 논문을 발견했습니다... 가슴이 아픕니다.",107, first_line);
     else if(temp == 9)
-        */
+        printText("찢어진 논문을 발견했습니다... 가슴이 아픕니다.",107, first_line);
     return;
 }
 

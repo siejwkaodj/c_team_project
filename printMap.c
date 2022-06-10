@@ -1,7 +1,10 @@
 ﻿#include "header.h"
-extern gotoxy(int x, int y);
-extern size;
-extern map[50][50];
+extern void gotoxy(int x, int y);
+extern int size;
+extern int level;
+extern int map[50][50];
+extern int player_shape;
+
 
 void printSquare(int, int, int, int);
 void printBlank(int x1, int y1, int x2, int y2);
@@ -21,10 +24,11 @@ void printMap() {
 	// 부가정보 출력; 입력문구, 1줄띔, 경계까지 고려해 y = 3에 출력
 	printSquare(105, 2, 188, 10);
 
-	printText("□ : 빈칸", 107, 4);
+	printText("level(난이도) : ", 107, 4);
+	printf("%d", level);
 	printText("◈ : 플레이어", 107, 5);
 	printText("▩ : 장애물 -> 지나가지 못합니다.", 107, 6);
-	printText("◎ : 교수   -> 만나면 3초간 움직이지 못합니다.", 107, 7);
+	printText("교 : 교수   -> 만나면 3초간 움직이지 못합니다.", 107, 7);
 	printText("▶ : 깃발   -> 획득하면 보물 혹은 랜덤한 이벤트가 발생합니다. ", 107, 8);
 	// 부가정보 감싸는 사각형 출력
 	printSquare(105, 12, 188, 52);

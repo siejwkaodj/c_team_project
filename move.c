@@ -68,7 +68,7 @@ void flag_effect(){
     int st = time(NULL);
     printBlank(107, first_line, 180, first_line);   // 첫줄 지우기
     // 긍정적 효과
-    
+    /*
     if (temp == 0){
         // 잠시동안 보물의 위치 보여줌
         printText("잠시동안 보물의 위치가 드러납니다", 107, first_line);
@@ -104,7 +104,7 @@ void flag_effect(){
     else if(temp == 8)
         
     else if(temp == 9)
-        
+        */
     return;
 }
 

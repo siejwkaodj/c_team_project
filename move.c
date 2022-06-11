@@ -41,7 +41,7 @@ int move(int *x, int *y, int ch){
         // 깃발
         case 4:
             map[ty][tx] = 0;
-            flag_effect();
+            // flag_effect();
             *x = tx;
             *y = ty;
             break;

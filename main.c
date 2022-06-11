@@ -18,6 +18,7 @@ extern int detection(int, int, int);			// x, y, ch 인자를 전달, 사용자�
 extern void printSquare(int, int, int, int);	// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형을 출력해줌.
 extern void printBlank(int, int, int, int);		// x1, y1, x2, y2 인자를 전달, 두 점으로 그린 사각형 내의 공간을 모두 지워줌.
 extern void rank(int rank[], char player_name[]);
+extern void printText(char *, int, int);
 
 // 미니게임
 extern int up_and_down_main();		// 미니게임 1

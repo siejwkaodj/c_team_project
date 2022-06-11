@@ -77,17 +77,24 @@ int main(void) {
 
 	// 플레이어 이름 입력부분
 	system("cls");
-	gotoxy(0, 7);	// text_align_center 함수 쓸거면 x = 0 이어야함.
-	text_align_center(HOR, "플레이어의 이름을");
-	printf("\n");
-	text_align_center(HOR, "입력하세요.");
-	printSquare(HOR/2-BOX_HALF_36, 5, HOR/2+BOX_HALF_36, 11);
-	
-	// player name 입력하는 부분
-	printSquare(HOR/2-BOX_HALF_36, 13, HOR/2+BOX_HALF_36, 15);
-	gotoxy(HOR/2-BOX_HALF_36+2, 14);
-	scanf("%s", player_name);
-
+	do{
+		gotoxy(0, 7);	// text_align_center 함수 쓸거면 x = 0 이어야함.
+		text_align_center(HOR, "플레이어의 이름을");
+		printf("\n");
+		text_align_center(HOR, "입력하세요.");
+		printSquare(HOR/2-BOX_HALF_36, 5, HOR/2+BOX_HALF_36, 11);
+		
+		// player name 입력하는 부분
+		printSquare(HOR/2-BOX_HALF_36, 13, HOR/2+BOX_HALF_36, 15);
+		gotoxy(HOR/2-BOX_HALF_36+2, 14);
+		scanf("%s", player_name);
+		system("cls");
+		if(!strcmp(player_name, "엄준식")){
+			gotoxy(0, 17);
+			text_align_center(HOR, "플레이어의 이름은 \"엄준식\" 일 수 없습니다.");
+		}
+	}
+	while(!strcmp(player_name, "엄준식"));
 
 	// 메뉴 시작
 	while (game_start) {

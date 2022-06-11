@@ -153,4 +153,5 @@ int find_treasure(){
     // 보물을 찾지 못했을 경우 -> ERROR
     if(!cnt)
         return 0;
+    return 1;
 }

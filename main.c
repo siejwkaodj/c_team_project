@@ -9,8 +9,14 @@ void text_align_center(int columns, char* text);
 void gotoxy(int x, int y);
 void loading(int);
 void menu(int);
+void event_check();
 
-// 외부정의 함수
+// 멀티쓰레드 함수
+int WINAPI user_input(LPVOID param);
+
+// 외부정의 함수, 변수
+extern int treasure_x, treasure_y;
+
 extern void printMap();							// 맵 출력하는 함수
 extern void flag(int level);					// 맵에 랜덤으로 깃발, 장애물 등을 배치하는 함수. 난이도 받아서 장애물 개수 등 설정.
 extern int move(int*, int*, int);				// x, y, ch 인자를 전달, 사용자의 위치를 움직임. detection 사용됨.
@@ -28,6 +34,8 @@ extern int jumping_man_main();		// 미니게임 3
 
 // 전역변수
 int map[50][50] = { 0 };			// 장애물, 교수, 깃발 등 위치정보 저장하는 배열, 일단 전부 0으로 초기화
+int p_x_speed = 2;			// 사용자 x속도, y속도
+int p_y_speed = 1;
 const int HOR = 190;
 const int size = 50;				// 맵 크기 설정해주는 상수
 const int max_x = 100;				// 플레이어 x, y 이동 범위 최대, 최소값
@@ -35,14 +43,20 @@ const int min_x = 2;
 const int max_y = 51;
 const int min_y = 3;
 const int first_line = 13;			// 화면 안내문 출력하는 첫째줄
-const int p_x_speed = 2;			// 사용자 x속도, y속도
-const int p_y_speed = 1;
+
+
 time_t tm1, tm2; 					// 게임 시간 받는 변수	
-int level = 1;					// 난이도 - 1 (초급), 2 (중급), 3 (고급)
+int level = 1;						// 난이도 - 1 (초급), 2 (중급), 3 (고급)
+int ch = -1;	// 사용자 움직임, 입력 주로 받는 변수
+int user = -1;
+int user_movable = 0;	// 사용자 움직임 제어하는 변수
+const int event_length = 10;
+int event_endtime[10] = {0, };
 int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
-int player_shape = 0; 			// 사용자 모양 바꿔주는 변수, 0~5
+int player_shape = 0; 				// 사용자 모양 바꿔주는 변수, 0~5
 int professor_location[20][2] = { 0 };	// 교수님 위치 저장하는 배열, 인원 크기보다 적을 시 나머지 공간엔 0 할당. 10 / 15 / 20명.
-int ranking[4] = { 0 }; // ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장
+int ranking[4] = { 0 }; 			// ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장
+int main_game_running = 0;		// 게임 끝났는지 확인해주는 변수
 char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
 
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
@@ -50,14 +64,17 @@ int main(void) {
 	int *p;							// 임시 포인터 변수
 	int x = 40, y = 12;				// 플레이어 위치 저장하는 변수
 	int game_start = 1;				// 메뉴부터 시작해서 전체 while문 반복 조절하는 변수
-	int main_game_running = 1;		// 게임 끝났는지 확인해주는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
 	int player_select_1 = 0; 		// **중요 메뉴, 게임시작, 미니게임 시작 등 while문 안에서 상태 저장하는 변수
 	int player_select_2 = 0;		// 게임 설명 부분 사용자 선택.
-	int ch = -1;	// 사용자 움직임, 입력 주로 받는 변수
-	char letter;
+	char letter;					// ch -> int형, letter -> char형 입력 처리
 	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수
 	
+	// 멀티쓰레드 부분
+	int threadId1;
+	int param = 0;
+	HANDLE threadHandle1;
+	threadHandle1 = CreateThread(NULL, 0, user_input, &param, 0, &threadId1);
 	
 	//cols 가로길이 lines 세로길이  값 넣어줘야함 -> 190 * 60으로 일단 설정
 	// 변수 안들어감. 숫자로 직접 넣기.
@@ -123,7 +140,7 @@ int main(void) {
 			while (player_select_2 != 27) {
 				player_select_2 = _getch();
 			}
-			player_select_1 = 0;
+			player_select_1 = 0;	// 다시 메뉴로
 			break;
 		case 2:	// 난이도 선택
 			if(level != 1){
@@ -133,26 +150,37 @@ int main(void) {
 				do {
 					system("cls");
 					gotoxy(0, 10);	// y좌표 이동시 사용
+					//Sleep(1000);
 					text_align_center(HOR, "난이도를 선택해주세요 (1 - 초급, 2 - 중급, 3 - 고급) : \n");
 					gotoxy(HOR / 2, 12);
 					scanf(" %d", &level);
-
+					
 					while(level != 1 && level != 2 && level != 3){
 						text_align_center(HOR, "잘못 입력하셨습니다.");
 						text_align_center(HOR, "다시 입력해주세요 : ");
 						scanf(" %d", &level);
 					}
 					menu(level + 4);
-					text_align_center(HOR, "계속 진행하시겠습니까? (y - 게임시작 / n - 메뉴로 돌아가기/ r - 레벨 다시 고르기)\n");
-					ch = _getch();
-				} while (ch == 'r');
+					
+					text_align_center(HOR, "계속 진행하시겠습니까? (y - 게임시작 / n - 메뉴로 돌아가기 / r - 레벨 다시 고르기)\n");
+					gotoxy(HOR/2, 20);
+					scanf(" %c", &letter);
+					while(letter != 'y' && letter != 'n' && letter != 'r'){
+						text_align_center(HOR, "잘못 입력하셨습니다.");
+						text_align_center(HOR, "다시 입력해주세요 : ");
+						scanf(" %c", &letter);
+					}
+					//ch = _getch();
+				} while (letter == 'r');
 
-				if (ch == 'n') {
+				if (letter == 'n') {
 					player_select_1 = 0;	// 메뉴 복귀
 					level = 1;
 					system("cls");
 					break;
 				}
+				//else if(ch == 'y')
+					//main_game_running = 1;
 			}
 			break;
 		case 3:	// 플레이어 선택
@@ -218,16 +246,16 @@ int main(void) {
 			// 다음 난이도 시작
 			player_select_1 = 2;
 			ch = 'y';
+			//main_game_running = 1;
 			break;
 		default:
 			printText("ERROR : player_select_1\n", 0, 0);
 			printf("player_select_1 : %d\n", player_select_1);
 			break;
 		}
-
 		
 		// main 게임 실행 부분
-		if(player_select_1 == 2 && ch == 'y') {	// 난이도 선택 + 플레이어 선택값 y일때만 실행
+		if(player_select_1 == 2 && letter == 'y') {	// 난이도 선택 + 플레이어 선택값 y일때만 실행
 			// 게임 시작 전 한번만 실행
 			system("cls");
 			loading(25);
@@ -235,8 +263,10 @@ int main(void) {
 			flag(level);
 			printMap();
 			tm1 = time(NULL); // 시작 시간 체크 - 이후에 게임 끝날 때  tm2 = time(NULL) 추가해야함. -> 완료
+			
+			main_game_running = 1;
 			while (main_game_running) {
-				// 주인공 문자 출력 부분
+				// 주인공 문자 출력 부분 -> x, y는 출력기준 좌표
 				gotoxy(x, y);
 				if(player_shape >= 0 || player_shape < 7)
 					menu(player_shape + 8);	
@@ -245,19 +275,27 @@ int main(void) {
 				
 				// 좌표 출력
 				sprintf(text, "좌표 : %d, %d ", x/2, y);
-				gotoxy(107, 14);
+				gotoxy(129, 4);
 				printf("%s", text);
 				//printText("좌표 : ", 107, 14);
 
-				// 다음 문자 부분
-				ch = _getch();
-				gotoxy(x, y);
-				printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
-				main_game_running = move(&x, &y, ch);	// x, y, ch 받아 사용자 위치 움직이는 부분
+				// 다음 방향 이동 부분
+				// ch = _getch();
+				// Sleep(10);
+				
+				if(user_movable){
+					gotoxy(x, y);
+					printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
+					main_game_running = move(&x, &y, user);	// x, y, ch 받아 사용자 위치 움직이는 부분
+					user_movable = 0;
+				}
+				// 이벤트 실행 부분
+
+				event_check();
 			}
 		}
 		// 메인게임 종료 및 미니게임 시작
-		if (main_game_running == 0){
+		if (main_game_running == 0 && letter == 'y'){
 			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
 			tm2 = time(NULL);
 			system("cls");
@@ -340,6 +378,98 @@ void gotoxy(int x, int y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Cur);
 	return;
 }
+
+int WINAPI user_input(LPVOID param){
+	int p = *(int*)param;
+	while(1){
+		if(main_game_running){
+			user = _getch();
+			user_movable = 1;
+			//printText("user_input 실행중", HOR/2, 30);
+		}
+		Sleep(10);
+	}
+	return 1;
+}
+
+void event_check(){
+	int current_time = 0;
+	// 이벤트 실행중일때 실행함
+	if(event_endtime[0]){
+		// 보물 1초동안 보여주기
+		printText("📋\b\b", treasure_x, treasure_y);
+	}
+	else if(event_endtime[1]){
+		// 교수 5초동안 숨기기
+
+	}
+	else if(event_endtime[2]){
+		// 이동속도 두배 -> move.c 에서 바꿔줌
+	}
+	else if(event_endtime[3]){
+		// 
+	}
+	else if(event_endtime[4]){
+
+	}
+	else if(event_endtime[5]){
+		// 아무 효과도 x
+	}
+	else if(event_endtime[6]){
+		// 이동 방향 바뀜
+	}
+	else if(event_endtime[7]){
+		// 모든 깃발 사라짐
+	}
+	else if(event_endtime[8]){
+		// 깃발 개수 늘어나거나 보물 재배치
+	}
+	else if(event_endtime[9]){
+		// 깃발 숨기기 -> move.c 에서 실행
+		
+	}
+
+	// 이벤트 종료할때가 되었을때 -> 시간 0으로 설정, 변수들 원래대로 초기화
+	current_time = time(NULL);
+	if(event_endtime[0] && event_endtime[0] < current_time){
+		event_endtime[0] = 0;
+		printText("▶\b\b", treasure_x, treasure_y);
+	}
+	if(event_endtime[1] && event_endtime[1] < current_time){
+		// 교수 안보이게 함
+		event_endtime[1] = 0;
+		
+	}
+	if(event_endtime[2] && event_endtime[2] < current_time){
+		// 이동속도 두배
+		event_endtime[2] = 0;
+		p_x_speed = 2;
+		p_y_speed = 1;
+	}
+	if(event_endtime[3] && event_endtime[3] < current_time){
+		event_endtime[3] = 0;
+	}
+	if(event_endtime[4] && event_endtime[4] < current_time){
+		event_endtime[4] = 0;
+	}
+	if(event_endtime[5] && event_endtime[5] < current_time){
+		event_endtime[5] = 0;
+	}
+	if(event_endtime[6] && event_endtime[6] < current_time){
+		event_endtime[6] = 0;
+	}
+	if(event_endtime[7] && event_endtime[7] < current_time){
+		event_endtime[7] = 0;
+	}
+	if(event_endtime[8] && event_endtime[8] < current_time){
+		event_endtime[8] = 0;
+	}
+	if(event_endtime[9] && event_endtime[9] < current_time){
+		event_endtime[9] = 0;
+	}
+	return;
+}
+
 
 void loading(int line){
 	for (int i = 0; i < 11; i++) {

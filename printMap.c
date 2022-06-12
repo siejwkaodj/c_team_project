@@ -4,6 +4,7 @@ extern int size;
 extern int level;
 extern int map[50][50];
 extern int player_shape;
+extern const int first_line;
 extern void menu(int);
 
 void printSquare(int, int, int, int);
@@ -26,6 +27,8 @@ void printMap() {
 
 	printText("level(난이도) : ", 107, 4);
 	printf("%d  /  ", level);
+	gotoxy(142, 4);
+	printf("  /  ");
 	printf("플레이어 : ");
 	menu(player_shape+8);
 	
@@ -33,6 +36,8 @@ void printMap() {
 	printText("▩ : 장애물 - 지나가지 못합니다.", 107, 6);
 	printText("교 : 교수   - 만나면 3초간 움직이지 못합니다.", 107, 7);
 	printText("▶ : 깃발   - 획득하면 보물 혹은 랜덤한 이벤트가 발생합니다. ", 107, 8);
+	
+	printText("-------------------------- 적용중인 버프 / 디버프 효과 --------------------------", 107, first_line+9);
 	// 부가정보 감싸는 사각형 출력
 	printSquare(105, 12, 188, 52);
 

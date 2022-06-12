@@ -79,7 +79,18 @@ int jumping_man_main()
 	end(tic);
 
 	system("pause>>null");
-	return (tic / 5 * 10);
+	if (tic / 5 * 10 >= 1000)
+		return 0;
+	else if (tic / 5 * 10 >= 800)
+		return 1;
+	else if (tic / 5 * 10 >= 600)
+		return 2;
+	else if (tic / 5 * 10 >= 400)
+		return 3;
+	else if (tic / 5 * 10 >= 200)
+		return 4;
+	else
+		return 5;
 }
 int game(int tic) { //게임화면 메인 요소
 	score(tic);

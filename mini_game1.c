@@ -2,7 +2,6 @@
 #define SET 5
 // 초급게임 - 가위바위보
 // 총 5회 시행, 8점 미만 --> 패널티 부여. (1점 당 1학기 유예)
-// 난이도에 맞게 printf를 수정해야함...(점수 단위가 다르므로)
 
 int set_random() // 교수님 가위바위보 랜덤 생성
 {
@@ -80,7 +79,10 @@ int rock_scissors_paper() // 게임 반복 (총 5회), main.c에 point값 반환
 		Sleep(1500);
 		system("cls");
 	} while (i < SET);
-	return point;
+	if (point > 8)
+		return 0;
+	else
+		return (point - 8);
 }
 
 void print_point(int point) //총점 출력 (미니게임 화면에서 결과를 출력, 실제 점수는 rock_scissors_paper()를 통해서 main.c에 반환)

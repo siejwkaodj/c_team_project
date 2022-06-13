@@ -47,7 +47,7 @@ const int first_line = 13;			// 화면 안내문 출력하는 첫째줄
 int line = 24;
 
 time_t tm1, tm2; 					// 게임 시간 받는 변수
-const int time_limit[3] = {40, 50, 60};
+const int time_limit[3] = {4, 5, 6};
 int level = 1;						// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 int ch = -1;	// 사용자 움직임, 입력 주로 받는 변수
 int user = -1;
@@ -57,7 +57,8 @@ int event_endtime[10] = {0, };
 int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 int player_shape = 0; 				// 사용자 모양 바꿔주는 변수, 0~5
 int professor_location[20][2] = { 0 };	// 교수님 위치 저장하는 배열, 인원 크기보다 적을 시 나머지 공간엔 0 할당. 10 / 15 / 20명.
-int ranking[4] = { 0 }; 			// ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장
+int ranking[6] = { 0 }; 			// ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장, 
+// ranking[3] => 학사 초과학기, 4는 석사초과, 5는 박사 초과학위
 int main_game_running = 0;		// 게임 끝났는지 확인해주는 변수
 char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일단 크기만 설정.
 
@@ -297,6 +298,8 @@ int main(void) {
 			system("cls");
 			gotoxy(0, 15);
 			menu(2);
+			// 시간초과 -> 학위 취득 실패 메세지
+			printText_mid("시간초과로 학위 취득에 실패하셨습니다...", 28);
 			printText_mid("Enter - 다시 시작하기", 30);
 			ch = _getch();
 			// 초기화
@@ -400,23 +403,29 @@ int main(void) {
 			menu(21);
 			loading(25);
 			system("cls");
-			// TODO - 미니게임 점수계산부분 추가
+
+			// 변수 초기화, 미니게임 학기 저장해줌.
+			minigame_result = 0;
 			if (level == 1){
 				// 초급 - 업다운
 				minigame_result = up_and_down_main();
-
+				ranking[level + 2] = minigame_result;
 			}
 			else if(level == 2){
 				// 중급 - 가위바위보
 				// minigame_result = 
 				minigame_result = rock_scissors_paper();
 				print_point(minigame_result);
+				ranking[level + 2] = minigame_result;
 			}	
 			else if(level == 3){
 				// 고급 - 공룡
 				minigame_result = jumping_man_main();
+				ranking[level + 2] = minigame_result;
 			}
-			
+			// 원래 배열에 초과학기 더해줌
+			ranking[level-1] += minigame_result;
+
 			// 점수 현황 출력 및 다음 게임 난이도 선택 부분
 			system("cls");
 			if(level < 3){

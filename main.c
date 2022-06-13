@@ -65,6 +65,7 @@ char player_name[CHAR_LENGTH];		// { 0 }으로 저장하면 크기 1됨. -> 일�
 // 0519 - 한성준, gotoxy와 맵출력, 플레이어 움직이게 하는 부분 등 추가.
 int main(void) {
 	int *p;							// 임시 포인터 변수
+	int age = 0;
 	int x = 40, y = 12;				// 플레이어 위치 저장하는 변수
 	int game_start = 1;				// 메뉴부터 시작해서 전체 while문 반복 조절하는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
@@ -116,7 +117,7 @@ int main(void) {
 		}
 	}
 	while(!strcmp(player_name, "엄준식"));
-	/*
+	
 	// 게임 인트로 부분
 	system("cls");
 	printSquare(HOR/2-70, 10, HOR/2+70, 35);
@@ -158,7 +159,7 @@ int main(void) {
 	
 	gotoxy(HOR/2, 33);
 	ch = _getch();
-	*/
+	
 	// 메뉴 시작
 	while (game_start) {
 		// 메뉴 및 ** 출력하는 화면 결정하는 부분 - 0610 수정
@@ -225,6 +226,8 @@ int main(void) {
 					system("cls");
 					break;
 				}
+				// main 게임 들어가기 전 ranking 초기화...필요?
+
 				//else if(ch == 'y')
 					//main_game_running = 1;
 			}
@@ -269,11 +272,12 @@ int main(void) {
 			}while(ch == 'r');
 			player_select_1 = 0;
 			break;
-		case 4:	// 개발자 모드 - 본 게임 완성 전까지 보류
+		// case 4:	// 개발자 모드 - 본 게임 완성 전까지 보류
 			
-			player_select_1 = 0;
-			break;
-		case 5:	// 졸업기록 열람 - 0609 구현 완료 - 실행되는지 확인요망
+		// 	player_select_1 = 0;
+		// 	break;
+		case 4:	// 졸업기록 열람 - case 5였는데 개발자 모드 없애면서 4로 올려줌.
+			system("cls");
 			rank(ranking, player_name);
 			player_select_2 = _getch();
 			while (player_select_2 != 27) {
@@ -281,7 +285,7 @@ int main(void) {
 			}
 			player_select_1 = 0;
 			break;
-		case 6:	// 게임 종료
+		case 5:	// 게임 종료
 			game_start = 0;
 			system("cls");
 			gotoxy(0, 5);
@@ -315,7 +319,7 @@ int main(void) {
 			break;
 		}
 		
-		// main 게임 실행 부분  
+		// main 게임 실행 부분
 		if(player_select_1 == 2 && letter == 'y') {	// 난이도 선택 + 플레이어 선택값 y일때만 실행
 			// 게임 시작 전 한번만 실행
 			system("cls");
@@ -376,11 +380,12 @@ int main(void) {
 		// 메인게임 종료 및 미니게임 시작
 		if (main_game_running == 0 && letter == 'y'){
 			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
+			// 메인게임에서 취득한 학기 저장.
 			tm2 = time(NULL);
 			if(tm2 - tm1 > time_limit[level-1])
-				ranking[level-1] = (tm2 - tm1 > time_limit[level-1]) / 10;
+				ranking[level-1] = 2 + (tm2 - tm1 - time_limit[level-1]) / 10;
 			else
-				ranking[level-1] += 2;
+				ranking[level-1] = 2;
 			// 한 번에 10학기 넘으면 게임오버시킴
 			if(ranking[level-1] > 10){
 				// 게임 오버
@@ -393,7 +398,7 @@ int main(void) {
 					map[i][j] = 0;
 				}
 			}
-			printText("SYSTEM | map 초기화 완료", 0, 0);
+			// printText("SYSTEM | map 초기화 완료", 0, 0);
 			// p = &map[0][0];
 			// while ((int)(&map[size-1][size-1] - p) < size * size){
 			// 	*p = 0;
@@ -451,7 +456,7 @@ int main(void) {
 				printSquare(HOR/2-50, 15, HOR/2+50, 45);
 				printText_mid("학력정보 열람", 18);
 				gotoxy(HOR/2-48, 20);
-				printf("%s 님의 학력 정보는 다음과 같습니다.");
+				printf("%s 님의 학력 정보는 다음과 같습니다.", player_name);
 
 				line = 25;
 				if(ranking[0]){
@@ -473,11 +478,19 @@ int main(void) {
 				printText("총 학기수 : ", HOR/2, 35);
 				printf("%d 학기 입니다.", ranking[0] + ranking[1] + ranking[2]);
 				
-				printText("당신의 현재 나이는", HOR/2-20, 37);
-				printf("%d 살입니다.", (ranking[0] + ranking[1] + ranking[2]) / 2 + 20);
-				printText_mid("< The End >", 39);
+				printText("당신의 현재 나이는 ", HOR/2-20, 37);
+				age = (ranking[0] + ranking[1] + ranking[2]) / 2 + 20;
+				printf("%d 살입니다.", age);
+				
+				if(age < 26)
+					printText_mid("대단하군요! 대한민국의 미래는 당신에게 달려 있습니다!", 39);
+				else if(age < 31)
+					printText_mid("게임 클리어! 수고하셨습니다. 이제 취업만이 남아 있네요.", 39);
+				else
+					printText_mid("조금 걸리긴 했지만... 그래도 수고하셨습니다!", 39);
 				
 				printText_mid("Press Enter To Restart", 43);
+				printText_mid("< The End >", 48);
 
 				ch = _getch();
 				// rank(ranking, player_name);
@@ -734,11 +747,14 @@ void menu(int n){
 			gotoxy(0, 20);
 			text_align_center(HOR, "3. 캐릭터 선택");
 			gotoxy(0, 24);
-			text_align_center(HOR, "4. 개발자 모드");
+			// text_align_center(HOR, "4. 개발자 모드");
+			// gotoxy(0, 28);
+			// text_align_center(HOR, "5. 졸업기록 열람");
+			text_align_center(HOR, "4. 졸업기록 열람");
+			// gotoxy(0, 32);
 			gotoxy(0, 28);
-			text_align_center(HOR, "5. 졸업기록 열람");
-			gotoxy(0, 32);
-			text_align_center(HOR, "6. 게임 종료");
+			// text_align_center(HOR, "6. 게임 종료");
+			text_align_center(HOR, "5. 게임 종료");
 			printSquare(HOR/2-15, 10, HOR/2+15, 35);
 			
 			break;

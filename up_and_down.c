@@ -27,7 +27,7 @@ int up_and_down_main()
 
 		if (answer > RANGE)
 			printf("입력하신 값이 20보다 큽니다! 다시 입력해주세요!\n");
-
+ 
 		else if (answer <= RANGE)
 		{
 			i++;

@@ -202,6 +202,7 @@ int main(void) {
 					while(level != 1 && level != 2 && level != 3){
 						text_align_center(HOR, "잘못 입력하셨습니다.");
 						text_align_center(HOR, "다시 입력해주세요 : ");
+						gotoxy(HOR / 2, 16);
 						scanf(" %d", &level);
 					}
 					menu(level + 4);

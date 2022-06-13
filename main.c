@@ -475,7 +475,7 @@ int main(void) {
 					line += 2;
 				}
 
-				printText("총 학기수 : ", HOR/2, 35);
+				printText("총 학기수 : ", HOR/2-18, 35);
 				printf("%d 학기 입니다.", ranking[0] + ranking[1] + ranking[2]);
 				
 				printText("당신의 현재 나이는 ", HOR/2-20, 37);

@@ -292,6 +292,19 @@ int main(void) {
 			ch = 'y';
 			//main_game_running = 1;
 			break;
+		case 8:
+			system("cls");
+			gotoxy(0, 15);
+			menu(2);
+			printText_mid("Enter - 다시 시작하기", 30);
+			ch = _getch();
+			// 초기화
+			player_select_1 = 0;
+			level = 0;
+			for(int i = 0; i < 4; i++)
+				ranking[i] = 0;
+			
+			break;
 		default:
 			printText("ERROR : player_select_1\n", 0, 0);
 			printf("player_select_1 : %d\n", player_select_1);
@@ -347,7 +360,7 @@ int main(void) {
 					gotoxy(x, y);
 					printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
 					main_game_running = move(&x, &y, user);	// x, y, ch 받아 사용자 위치 움직이는 부분
-					user_movable = 0;
+					user_movable--;
 				}
 				// 이벤트 실행 부분
 
@@ -360,6 +373,16 @@ int main(void) {
 		if (main_game_running == 0 && letter == 'y'){
 			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
 			tm2 = time(NULL);
+			if(tm2 - tm1 > time_limit[level-1])
+				ranking[level-1] = (tm2 - tm1 > time_limit[level-1]) / 10;
+			else
+				ranking[level-1] += 2;
+			// 한 번에 10학기 넘으면 게임오버시킴
+			if(ranking[level-1] > 10){
+				// 게임 오버
+				player_select_1 = 8;
+				continue;
+			}
 			system("cls");
 			for(int i = 0; i < size; i++){
 				for(int j = 0; j < size; j++){
@@ -481,7 +504,11 @@ int WINAPI user_input(LPVOID param){
 	while(1){
 		if(main_game_running){
 			user = _getch();
-			user_movable = 1;
+			// 두번 가는 부분 구현
+			if(event_endtime[2])
+				user_movable = 2;
+			else
+				user_movable = 1;
 			//printText("user_input 실행중", HOR/2, 30);
 		}
 		Sleep(10);

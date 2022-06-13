@@ -165,8 +165,8 @@ void flag_effect(){
             else if(temp == 2){
                 // 5초간 이동속도 두배 -> 멀티쓰레드...필요
                 event_endtime[temp] = st + 5;
-                p_x_speed *= 2;
-                p_y_speed *= 2;
+                // p_x_speed *= 2;
+                // p_y_speed *= 2;
             }
             else if(temp == 3){
                 // 긍정 효과 없음 1
@@ -205,7 +205,7 @@ void flag_effect(){
             }
             else if(temp == 9){
                 // 플레이 시간 5초 늘리기
-                event_endtime[temp] = st;
+                event_endtime[temp] = st + 4;
             }
         }
     }

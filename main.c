@@ -10,6 +10,7 @@ void gotoxy(int x, int y);
 void loading(int);
 void menu(int);
 void event_check();
+void printText_mid(char *text, int y);
 
 // 멀티쓰레드 함수
 int WINAPI user_input(LPVOID param);
@@ -166,7 +167,7 @@ int main(void) {
 			system("cls");
 			menu(3);	// 처음 메뉴 선택 부분
 			gotoxy(HOR/2, 30);
-			scanf("%d", &player_select_1);
+			scanf(" %d", &player_select_1);
 
 			// 플레이어 메뉴 선택 입력 잘못되었을때 다시 받는 부분 -> ** 1~6 이외의 값은 입력 못하게 막음
 			while (player_select_1 < 1 || player_select_1 > 6) {
@@ -174,7 +175,7 @@ int main(void) {
 				gotoxy(0, 0);
 				text_align_center(HOR, "\n\n다시 입력해주세요.");
 				menu(3);	// 메뉴 출력
-				scanf("%d", &player_select_1);
+				scanf(" %d", &player_select_1);
 			}
 			break;
 		case 1:	// 게임 설명
@@ -322,11 +323,11 @@ int main(void) {
 				printf("%s", text);
 				
 				// event_endtime 출력 -> 나중에 주석처리, 디버깅용
-				gotoxy(1, 2);
-				for(int i = 0; i < event_length; i++)
-					printf("%d : %d, ", i, event_endtime[i]);
+				// gotoxy(1, 2);
+				// for(int i = 0; i < event_length; i++)
+				// 	printf("%d : %d, ", i, event_endtime[i]);
 
-				// 남은 시간 출력
+				// 남은 시간 및 초과 시간 출력
 				gotoxy(166, 4);
 				
 				if(time(NULL) - tm1 < time_limit[level-1]){
@@ -395,7 +396,7 @@ int main(void) {
 			// 점수 현황 출력 및 다음 게임 난이도 선택 부분
 			system("cls");
 			if(level < 3){
-				menu(22);
+				menu(22);	// 랭킹 및 다음 난이도 이동 질문 출력
 				level++;
 				ch = _getch();
 				if(ch == 'n'){
@@ -411,10 +412,45 @@ int main(void) {
 				// 다시 main_game_running 초기화해줌
 				main_game_running = 1;
 			}
-			else{
-				// 3단계 미니게임 클리어 -> 게임 엔딩 추가
-				rank(ranking, player_name);
+			else if (level == 3){
+				// 게임 엔딩 부분
+				system("cls");
+				printSquare(HOR/2-50, 15, HOR/2+50, 45);
+				printText_mid("학력정보 열람", 18);
+				gotoxy(HOR/2-48, 20);
+				printf("%s 님의 학력 정보는 다음과 같습니다.");
+
+				line = 25;
+				if(ranking[0]){
+					printText_mid("학사 : ", line);
+					printf("%d 학기", ranking[0]);
+					line += 2;
+				}
+				if(ranking[1]){
+					printText_mid("석사 : ", line);
+					printf("%d 학기", ranking[1]);
+					line += 2;
+				}
+				if(ranking[2]){
+					printText_mid("박사 : ", line);
+					printf("%d 학기", ranking[2]);
+					line += 2;
+				}
+
+				printText("총 학기수 : ", HOR/2, 35);
+				printf("%d 학기 입니다.", ranking[0] + ranking[1] + ranking[2]);
+				
+				printText("당신의 현재 나이는", HOR/2-20, 37);
+				printf("%d 살입니다.", (ranking[0] + ranking[1] + ranking[2]) / 2 + 20);
+				printText_mid("< The End >", 39);
+				
+				printText_mid("Press Enter To Restart", 43);
+
+				ch = _getch();
+				// rank(ranking, player_name);
 				level = 1;	// 다시 레벨 초기화 -> 처음부터 할 수 있게
+				player_select_1 = 0;
+				ch = 0;
 			}
 		}
 	}
@@ -451,6 +487,12 @@ int WINAPI user_input(LPVOID param){
 		Sleep(10);
 	}
 	return 1;
+}
+
+void printText_mid(char *text, int y){
+	gotoxy((HOR-strlen(text))/2, y);
+	printf("%s", text);
+	return;
 }
 
 void event_check(){
@@ -826,7 +868,7 @@ void menu(int n){
             else
                 printText("졸업논문이 담긴 하드가 날아갔습니다...새로 작성해야 합니다.", 107, line);
             printText("깃발 개수가 초기화되고 보물이 재배치됩니다.", 107, line + 1);
-            Sleep(3000);
+            Sleep(2000);
             tm1 + 3;
             line += 3;
         break;

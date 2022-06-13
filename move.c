@@ -2,11 +2,13 @@
 extern int detection(int*, int*, int);
 extern void printText(char*, int, int);  // printMap.c에 있음. -> 기본위치 107, 12정도
 extern void printBlank(int, int, int, int);
+extern void printText_mid(char*, int);  // main.c에 정의
 
 // 전역변수
 int treasure_x = 0, treasure_y = 0;
 extern int size;
 extern int line;
+extern int level;
 extern const int HOR;
 extern const int first_line;
 extern int map[50][50];
@@ -81,10 +83,29 @@ int move(int *x, int *y, int ch){
         case 5:
             printBlank(HOR / 2 - 50, 20, HOR/2+50, 40);
             printSquare(HOR / 2 - 50, 20, HOR/2+50, 40);
-            gotoxy((HOR-strlen("졸업 논문을 획득했습니다! 드디어 졸업할 수 있습니다!"))/2, 25);
-            printf("졸업 논문을 획득했습니다! 드디어 졸업할 수 있습니다!");
-            //printText("졸업 논문을 획득했습니다! 드디어 졸업할 수 있습니다!", 107, first_line);
             
+            // gotoxy((HOR-strlen("졸업 논문을 획득했습니다! 드디어 졸업할 수 있습니다!"))/2, 25);
+            // printf("졸업 논문을 획득했습니다! 드디어 졸업할 수 있습니다!");
+            // printText("졸업 논문을 획득했습니다! 드디어 졸업할 수 있습니다!", 107, first_line);
+            switch(level){
+                case 1:
+                    printText_mid("졸업 논문을 획득했습니다! 드디어 대학을 졸업할 수 있습니다!", 25);
+                    printText_mid("다음 레벨 : 석사 (난이도 : 중)", 27);
+                break;
+                case 2:
+                    printText_mid("석사 학위 논문을 완성했습니다! 하지만 아직 갈 길이 멉니다...", 25);
+                    printText_mid("다음 레벨 : 박사 (난이도 : 상)", 27);
+                break;
+                case 3:
+                    printText_mid("박사 학위 논문을 발표했습니다! 당신의 명성이 올라갑니다!", 25);
+                    printText_mid("이제 다 끝났습니다!", 27);
+                    Sleep(100);
+                    printText_mid("다음 레벨 : 교수 취업 (난이도 : ???)", 27);
+                    Sleep(1000);
+                    printText_mid("                                    ", 27);
+                break;
+
+            }
             for(int i = 0; i < 3; i++){
                 //gotoxy(107, first_line + 1);
                 gotoxy((HOR-strlen("Ending in %d..."))/2, 30);
@@ -252,7 +273,7 @@ void flag_effect(){
                     else
                         printText("졸업논문이 담긴 하드가 날아갔습니다...새로 작성해야 합니다.", 107, line);
                     printText("깃발 개수가 초기화되고 보물이 재배치됩니다.", 107, line + 1);
-                    Sleep(3000);
+                    Sleep(2000);
                     tm1 + 3;
                     line += 3;
                 break;

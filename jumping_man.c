@@ -79,6 +79,7 @@ int jumping_man_main()
 	end(tic);
 
 	system("pause>>null");
+	system("mode con cols=190 lines=60");
 	if (tic / 5 * 10 >= 1000)
 		return 0;
 	else if (tic / 5 * 10 >= 800)

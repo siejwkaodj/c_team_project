@@ -13,7 +13,7 @@ extern loading(int);
 int up_and_down_main()
 {
 	int k, number, answer;
-	int i = 1;
+	int i = 0;
 	srand(time(NULL));
 	number = (rand() % RANGE) + 1;
 	

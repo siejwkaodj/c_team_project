@@ -88,7 +88,7 @@ int rock_scissors_paper() // 게임 반복 (총 5회), main.c에 point값 반환
 void print_point(int point) //총점 출력 (미니게임 화면에서 결과를 출력, 실제 점수는 rock_scissors_paper()를 통해서 main.c에 반환)
 {
 	printf("총점 : %d\n", point);
-
+ 
 	if (point > 8)
 		printf("총점이 8점 이상이므로 졸업이 유예되지 않습니다! 축하합니다~\n");
 	else

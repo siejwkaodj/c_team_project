@@ -1,4 +1,4 @@
-﻿//공룡 게임 변형
+﻿//박사 게임! 점수 반영 : 1500점 이상 시 패널티 x. 1500점 미만 시 20점 당 1일 추가. 
 #include "header.h"
 #define MAN_X 0
 #define MAN_Y 15

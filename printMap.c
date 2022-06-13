@@ -1,6 +1,6 @@
 ﻿#include "header.h"
 extern void gotoxy(int x, int y);
-extern int size;
+extern const int size;
 extern int level;
 extern int map[50][50];
 extern int player_shape;
@@ -16,7 +16,6 @@ void printMap() {
 	extern min_x;
 	extern max_y;
 	extern min_y;
-	extern size;
 	//char ch = '■';		// 변수에 저장하고 출력하면 이상하게 나옴
 	system("cls");
 	// 맵 전체 사각형 출력
@@ -30,8 +29,30 @@ void printMap() {
 	gotoxy(142, 4);
 	printf("  /  ");
 	printf("플레이어 : ");
-	menu(player_shape+8);
-	
+	switch(player_shape){
+		case 0:
+			printf("◈");
+		break;
+		case 1:
+			printf("◇");
+		break;
+		case 2:
+			printf("◆");
+		break;
+		case 3:
+			printf("엄");
+		break;
+		case 4:
+			printf("준");
+		break;
+		case 5:
+			printf("식");
+		break;
+		default:
+			printText("ERROR : error in printMap.c - cant print player_shape", 0, 0);
+		break;
+	}
+	printf("  /  ");
 	
 	printText("▩ : 장애물 - 지나가지 못합니다.", 107, 6);
 	printText("교 : 교수   - 만나면 3초간 움직이지 못합니다.", 107, 7);
@@ -124,6 +145,13 @@ void flag(int level) {
 	int wallNum = 0;    // 장애물 개수 지정
 	int num = 0;        // 깃발 개수 세는것
 	int i = 0;
+
+	// map 초기화
+	for(int i = 0; i < size; i++){
+		for(int j = 0; j < size; j++){
+			map[i][j] = 0;
+		}
+	}
 	// 장애물 생성
 	switch (level) {
 	case 1:

@@ -27,7 +27,7 @@ extern void rank(int rank[], char player_name[]);
 extern void printText(char *, int, int);
 
 // 미니게임
-//extern int up_and_down_main();		// 미니게임 1
+extern int up_and_down_main();		// 미니게임 1
 extern int rock_scissors_paper();	// 미니게임 2
 extern void print_point();			// 미니게임 2 결과 출력 함수
 extern int jumping_man_main();		// 미니게임 3
@@ -43,9 +43,10 @@ const int min_x = 2;
 const int max_y = 51;
 const int min_y = 3;
 const int first_line = 13;			// 화면 안내문 출력하는 첫째줄
+int line = 24;
 
-
-time_t tm1, tm2; 					// 게임 시간 받는 변수	
+time_t tm1, tm2; 					// 게임 시간 받는 변수
+const int time_limit[3] = {40, 50, 60};
 int level = 1;						// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 int ch = -1;	// 사용자 움직임, 입력 주로 받는 변수
 int user = -1;
@@ -113,7 +114,8 @@ int main(void) {
 		}
 	}
 	while(!strcmp(player_name, "엄준식"));
-
+	/*
+	// 게임 인트로 부분
 	system("cls");
 	printSquare(HOR/2-70, 10, HOR/2+70, 35);
 
@@ -154,7 +156,7 @@ int main(void) {
 	
 	gotoxy(HOR/2, 33);
 	ch = _getch();
-
+	*/
 	// 메뉴 시작
 	while (game_start) {
 		// 메뉴 및 ** 출력하는 화면 결정하는 부분 - 0610 수정
@@ -295,7 +297,7 @@ int main(void) {
 			break;
 		}
 		
-		// main 게임 실행 부분
+		// main 게임 실행 부분  
 		if(player_select_1 == 2 && letter == 'y') {	// 난이도 선택 + 플레이어 선택값 y일때만 실행
 			// 게임 시작 전 한번만 실행
 			system("cls");
@@ -318,7 +320,23 @@ int main(void) {
 				sprintf(text, "좌표 : %d, %d ", x/2, y);
 				gotoxy(129, 4);
 				printf("%s", text);
-				//printText("좌표 : ", 107, 14);
+				
+				// event_endtime 출력 -> 나중에 주석처리, 디버깅용
+				gotoxy(1, 2);
+				for(int i = 0; i < event_length; i++)
+					printf("%d : %d, ", i, event_endtime[i]);
+
+				// 남은 시간 출력
+				gotoxy(166, 4);
+				
+				if(time(NULL) - tm1 < time_limit[level-1]){
+					printf("남은 시간 : ");
+					printf("%3d", time_limit[level-1] - (time(NULL) - tm1));
+				}
+				else{
+					printf("초과 시간 : ");
+					printf("%3d", (time(NULL) - tm1) - time_limit[level-1]);
+				}	
 
 				// 다음 방향 이동 부분
 				// ch = _getch();
@@ -333,6 +351,8 @@ int main(void) {
 				// 이벤트 실행 부분
 
 				event_check();
+				// Sleep(67);
+				// printBlank(0, 0, 0, 180);
 			}
 		}
 		// 메인게임 종료 및 미니게임 시작
@@ -358,7 +378,7 @@ int main(void) {
 			// TODO - 미니게임 점수계산부분 추가
 			if (level == 1){
 				// 초급 - 업다운
-				//minigame_result = up_and_down_main();
+				minigame_result = up_and_down_main();
 
 			}
 			else if(level == 2){
@@ -434,164 +454,121 @@ int WINAPI user_input(LPVOID param){
 }
 
 void event_check(){
-	int current_time = 0, temp = 0;
-	int line = first_line + 10;
+	int current_time = 0, cnt = 0, temp = 0;
+	
+	int event_end_arr[10] = { 0 };
 	// 이벤트 문구 출력 부분 -> main에서 실행
-	if(event_endtime[0]){
-		// 보물 1초동안 보여주기
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("교수님의 서재에서 특별 정보를 얻었습니다! 졸업 논문의 끝이 희미하게 보입니다!", 107, line);
-        line += 3;
-	}
-	if(event_endtime[1]){
-		// 교수 5초동안 숨기기
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("교수님이 휴가에 가십니다! 3초동안 교수님이 사라집니다.", 107, line);
-        line += 3;
-	}
-	if(event_endtime[2]){
-		// 이동속도 두배 -> move.c 에서 바꿔줌
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("에너지 드링크를 획득했습니다! 5초 동안 이동속도가 빨라집니다.", 107, line);
-        line += 3;
-	}
-	if(event_endtime[3]){
-		// 긍정 효과 없음 1
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("교수님으로부터 칭찬을 받았습니다. 왠지 기분이 좋아집니다.", 107, line);
-        line += 3;
-	}
-	if(event_endtime[4]){
-		// 긍정 효과 없음 2
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("이번에 나간 미팅에서 상대가 만족스러워 하는 것 같습니다. 기분이 1 좋아집니다.", 107, line);
-        line += 3;
-	}
-	if(event_endtime[5]){
-		// 부정 효과 없음 1
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("찢어진 논문을 발견했습니다... 내 논문은 아니지만 왠지 가슴이 아픕니다.", 107, line);
-        line += 3;
-	}
-	if(event_endtime[6]){
-		// 이동 방향 바뀜
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("너무 오랬동안 밤을 샜습니다.",107, line);
-        printText("8초간 어지러워서 방향감각이 사라집니다.",107, line+1);
-        line += 3;
-	}
-	if(event_endtime[7]){
-		// 모든 깃발 사라짐
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("너무 오랬동안 밤을 샜습니다.",107, line);
-        printText("잠시동안 앞이 보이지 않습니다.",107, line+1);
-        line += 3;
-	}
-	if(event_endtime[8]){
-		// 깃발 초기화 및 재배치
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        temp = rand() % 2;
-        if(temp % 2 == 0)
-            printText("졸업논문 주제가 바뀌었습니다...다시 준비해야 합니다. ", 107, line);
-        else
-            printText("졸업논문이 담긴 하드가 날아갔습니다...새로 작성해야 합니다.", 107, line);
-        printText("깃발 개수가 초기화되고 보물이 재배치됩니다.", 107, line + 1);
-        line += 3;
-	}
-	if(event_endtime[9]){
-		// 시간 5초 늘리기
-		printBlank(107, first_line + line, 180, first_line + line + 2);
-        printText("코로나 19로 인해 졸업 프로젝트 발표일이 늦어졌습니다.", 107, line);
-        line += 3;	
-	}
+	
 
+	// 아무 이벤트나 종료할 것이 있다면 event_end_arr 에 저장 후 cnt+=1
+	current_time = time(NULL);
+	for(int i = 0; i < event_length; i++){
+		if(event_endtime[i] && event_endtime[i] < current_time){
+			event_end_arr[cnt] = i;	// 인덱스 번호를 배열에 저장
+			cnt += 1;
+		}
+	}
 	// 이벤트 종료
 	// -> 시간 0으로 설정, 변수들 원래대로 초기화
-	current_time = time(NULL);
-	if(event_endtime[0] && event_endtime[0] < current_time){
-		// 보물 위치 보이게 -> 다시 숨김
-		event_endtime[0] = 0;
-		printText("▶\b\b", treasure_x, treasure_y);
-	}
-	if(event_endtime[1] && event_endtime[1] < current_time){
-		// 교수 안보이게 함 -> 다시 보이게
-		event_endtime[1] = 0;
-		for(int i = 0; i < 50; i++){
-			for(int j = 0; j < 50; j++){
-				if(map[i][j] == 3){
-					printText("교", (j+1)*2, i+min_y);
+	// 끝내야 할 것들만 배열에 담아 그것들만 초기화함.
+	for(int i = 0; i < cnt; i++){
+		switch(event_end_arr[i]){
+			case 0:
+				// 보물 위치 보이게 -> 다시 숨김
+				event_endtime[0] = 0;
+				printText("▶\b\b", (treasure_x+1)*2, treasure_y+min_y);
+			break;
+			case 1:
+				// 교수 안보이게 함 -> 다시 보이게
+				event_endtime[1] = 0;
+				for(int i = 0; i < 50; i++){
+					for(int j = 0; j < 50; j++){
+						if(map[i][j] == 3){
+							printText("교", (j+1)*2, i+min_y);
+						}
+					}
 				}
-			}
+			break;
+			case 2:
+				// 이동속도 두배 -> 원래 이동속도로 복귀
+				event_endtime[2] = 0;
+				p_x_speed = 2;
+				p_y_speed = 1;
+			break;
+			case 3:
+				event_endtime[3] = 0;
+			break;
+			case 4:
+				event_endtime[4] = 0;
+			break;
+			case 5:
+				// 아무 효과도 x
+				event_endtime[5] = 0;
+			break;
+			case 6:
+				// 방향 반전 -> 원래대로 설정
+				event_endtime[6] = 0;
+			break;
+			case 7:
+				// 모든 깃발, 교수 아이콘 사라지게 -> 다시 보이게
+				event_endtime[7] = 0;
+				for(int i = 0; i < size; i++){
+					for(int j = 0; j < size; j++){
+						if(map[i][j] == 3){
+							printText("교", (j+1)*2, i+min_y);
+						}
+						else if(map[i][j] == 4 || map[i][j] == 5){
+							printText("▶", (j+1)*2, i+min_y);
+						}
+					}
+				}
+			break;
+			case 8:
+				// 8번 깃발 개수 초기화 및 재설정.
+				event_endtime[8] = 0;
+				flag(level);
+				printMap();
+			break;
+			case 9:
+				// 플레이시간 5초 늘리기, 바로 실행해야해서 등호 추가함.
+				event_endtime[9] = 0;
+				tm1 -= 5;
+			break;
+			deault:
+				printText("ERROR : event_end_checking", 0, 0);
+			break;
 		}
-		
-	}
-	if(event_endtime[2] && event_endtime[2] < current_time){
-		// 이동속도 두배 -> 원래 이동속도로 복귀
-		event_endtime[2] = 0;
-		p_x_speed = 2;
-		p_y_speed = 1;
-	}
-	if(event_endtime[3] && event_endtime[3] < current_time){
-		event_endtime[3] = 0;
-	}
-	if(event_endtime[4] && event_endtime[4] < current_time){
-		event_endtime[4] = 0;
-	}
-	if(event_endtime[5] && event_endtime[5] < current_time){
-		// 아무 효과도 x
-		event_endtime[5] = 0;
-	}
-	if(event_endtime[6] && event_endtime[6] < current_time){
-		// 방향 반전 -> 원래대로 설정
-		event_endtime[6] = 0;
-	}
-	if(event_endtime[7] && event_endtime[7] < current_time){
-		// 모든 깃발, 교수 아이콘 사라지게 -> 다시 보이게
-		event_endtime[7] = 0;
-		for(int i = 0; i < size; i++){
-			for(int j = 0; j < size; j++){
-				if(map[i][j] == 3){
-					printText("교", (j+1)*2, i+min_y);
-				}
-				else if(map[i][j] == 4){
-					printText("▶", (j+1)*2, i+min_y);
-				}
-			}
-		}
-
 	}
 	
-	if(event_endtime[8] && event_endtime[8] <= current_time){
-		// 8번 깃발 개수 초기화 및 재설정.
-		event_endtime[8] = 0;
-		flag(level);
-		printMap();
-	}
-	
-	if(event_endtime[9] && event_endtime[9] <= current_time){
-		// 플레이시간 5초 늘리기, 바로 실행해야해서 등호 추가함.
-		event_endtime[9] = 0;
-		tm1 -= 5;
+	// 이벤트 출력문구 다시 고쳐줌
+	if(cnt){
+		line = first_line + 11;
+		printBlank(107, line, 187, 50);
+		for(int i = 0; i < event_length; i++){
+			if(event_endtime[i]){
+				menu(i + 23);
+			}
+		}
 	}
 	return;
 }
 
 
-void loading(int line){
+void loading(int p_line){
 	for (int i = 0; i < 11; i++) {
-		gotoxy(0, line);
+		gotoxy(0, p_line);
 		text_align_center(HOR, "            ");
-		gotoxy(0, line+2);
+		gotoxy(0, p_line+2);
 		text_align_center(HOR, "                    ");
-		//printBlank(HOR-5, line, HOR+5, line);
-		//printBlank(HOR-10, line+2, HOR+10, line+2);
+		//printBlank(HOR-5, p_line, HOR+5, p_line);
+		//printBlank(HOR-10, p_line+2, HOR+10, p_line+2);
 
-		gotoxy(0, line);
+		gotoxy(0, p_line);
 		text_align_center(HOR, "Loading");
-		gotoxy(HOR/2+4, line);
+		gotoxy(HOR/2+4, p_line);
 		printf("...");
 
-		gotoxy(0, line+2);
+		gotoxy(0, p_line+2);
 		switch(i){
 			case 0:
 			text_align_center(HOR, "□□□□□□□□□□");
@@ -643,6 +620,9 @@ void loading(int line){
 
 // 그냥 메뉴 출력해주는 것들 모아놓은 함수, 안에 system("cls") 넣지 말기 (헷갈림)
 void menu(int n){
+	// int line = first_line + 11;
+	line = first_line + 11;
+	int temp = 0;
 	switch(n){
 		case 1:
 			//GAME START 혹은 게임이름으로 변경 필요...0530 완료
@@ -787,6 +767,76 @@ void menu(int n){
 			gotoxy(0, 15);
 			text_align_center(HOR, "다음 난이도로 넘어가시겠습니까? (예 - 아무 키나 누르세요 / 메뉴(난이도는 저장됩니다) - n)");
 			break;
+		case 23:
+            // 보물 1초동안 보여주기
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("교수님의 서재에서 특별 정보를 얻었습니다! 졸업 논문의 끝이 희미하게 보입니다!", 107, line);
+            line += 3;
+        break;
+        case 24:
+            // 교수 5초동안 숨기기
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("교수님이 휴가에 가십니다! 3초동안 교수님이 사라집니다.", 107, line);
+            line += 3;
+        break;
+        case 25:
+            // 이동속도 두배 -> move.c 에서 바꿔줌
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("에너지 드링크를 획득했습니다! 5초 동안 이동속도가 빨라집니다.", 107, line);
+            line += 3;
+        break;
+        case 26:
+            // 긍정 효과 없음 1
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("교수님으로부터 칭찬을 받았습니다. 왠지 기분이 좋아집니다.", 107, line);
+            line += 3;
+        break;
+        case 27:
+            // 긍정 효과 없음 2
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("이번에 나간 미팅에서 상대의 반응이 좋습니다. 기분이 1 좋아집니다.", 107, line);
+            line += 3;
+        break;
+        case 28:
+            // 부정 효과 없음 1
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("찢어진 논문을 발견했습니다... 내 논문은 아니지만 왠지 가슴이 아픕니다.", 107, line);
+            line += 3;
+        break;
+        case 29:
+            // 이동 방향 바뀜
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("너무 오랬동안 밤을 샜습니다.",107, line);
+            printText("8초간 어지러워서 방향감각이 사라집니다.",107, line+1);
+            line += 3;
+        break;
+        case 30:
+            // 모든 깃발 사라짐
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("너무 오랬동안 밤을 샜습니다. 잠시동안 앞이 보이지 않습니다.",107, line);
+            printText("(8초간 모든 깃발, 교수 아이콘 사라짐)",107, line+1);
+            line += 3;
+        break;
+        case 31:
+            // 깃발 초기화 및 재배치
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            temp = rand() % 2;
+            if(temp % 2 == 0)
+                printText("졸업논문 주제가 바뀌었습니다...다시 준비해야 합니다. ", 107, line);
+            else
+                printText("졸업논문이 담긴 하드가 날아갔습니다...새로 작성해야 합니다.", 107, line);
+            printText("깃발 개수가 초기화되고 보물이 재배치됩니다.", 107, line + 1);
+            Sleep(3000);
+            tm1 + 3;
+            line += 3;
+        break;
+        case 32:
+            // 시간 5초 늘리기
+            printBlank(107, first_line + line, 187, first_line + line + 2);
+            printText("코로나 19로 인해 졸업 프로젝트 발표일이 늦어졌습니다.", 107, line);
+            printText("제한시간이 5초 줄어듭니다.", 107, line+1);
+            line += 3;
+        break;
 		default:
 			printText("ERROR : MENU FUNCTION\n", 0, 0);
 			break;

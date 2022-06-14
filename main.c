@@ -46,8 +46,10 @@ const int min_y = 3;
 const int first_line = 13;			// 화면 안내문 출력하는 첫째줄
 int line = 24;
 
+const int test_mode = 0;
+
 time_t tm1, tm2; 					// 게임 시간 받는 변수
-const int time_limit[3] = {40, 50, 60};
+int time_limit[3] = {40, 50, 60};
 int level = 1;						// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 int ch = -1;	// 사용자 움직임, 입력 주로 받는 변수
 int user = -1;
@@ -69,11 +71,23 @@ int main(void) {
 	int x = 40, y = 12;				// 플레이어 위치 저장하는 변수
 	int game_start = 1;				// 메뉴부터 시작해서 전체 while문 반복 조절하는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
+	int semester_limit = 10;
 	// int player_select_1 = 0; 		// **중요 메뉴, 게임시작, 미니게임 시작 등 while문 안에서 상태 저장하는 변수
 	// int player_select_2 = 0;		// 게임 설명 부분 사용자 선택.
 	char letter;					// ch -> int형, letter -> char형 입력 처리
 	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수
 	
+	// 테스트 모드 기능 -> 
+	// 제한시간 줄이고 
+	// 초과학기시 1학기 초과만으로도 탈락 가능하게 함.
+	// 인트로 없앰 
+	if(test_mode){
+		for(int i = 0; i < 3; i++){
+			time_limit[i] = i+4;
+		}
+		semester_limit = 1;
+	}
+
 	// 멀티쓰레드 부분
 	int threadId1;
 	int param = 0;
@@ -117,49 +131,49 @@ int main(void) {
 		}
 	}
 	while(!strcmp(player_name, "엄준식"));
-	
-	// 게임 인트로 부분
-	system("cls");
-	printSquare(HOR/2-70, 10, HOR/2+70, 35);
+	if(!test_mode){
+		// 게임 인트로 부분
+		system("cls");
+		printSquare(HOR/2-70, 10, HOR/2+70, 35);
 
-	gotoxy((HOR - strlen("<게임 스토리>")) / 2, 12);
-	printf("<게임 스토리>");
-	
+		gotoxy((HOR - strlen("<게임 스토리>")) / 2, 12);
+		printf("<게임 스토리>");
+		
 
-	gotoxy((HOR - strlen("COVID-19가 슬슬 끝나갈 때쯤 \"진짜\"인줄 알았던 대학 생활을 즐기며 평화로운 나날을 보내고 있었는데...이때까지만 해도 몰랐다.")) / 2, 15);
-	printf("COVID-19가 슬슬 끝나갈 때쯤 \"진짜\"인줄 알았던 대학 생활을 즐기며 평화로운 나날을 보내고 있었는데...이때까지만 해도 몰랐다.");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("지겨운 술 냄새와, 완화상평의 혜택이 무너지고, 슬슬 취업이 우리에게 다가오고 있다는 것을...!")) / 2, 17);
-	printf("지겨운 술 냄새와, 완화상평의 혜택이 무너지고, 슬슬 취업이 우리에게 다가오고 있다는 것을...!");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("과연 우리는 졸업을 무사히 8학기만으로 끝낼 수 있을까?")) / 2, 19);
-	printf("과연 우리는 졸업을 무사히 8학기만으로 끝낼 수 있을까?");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("그리고, 너무 무리한 나머지 교수님의 눈에 들어와버린 나...!")) / 2, 21);
-	printf("그리고, 너무 무리한 나머지 교수님의 눈에 들어와버린 나...!");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("어쩔 수 없이 교수님의 설득에 대학원에 진학하게 되는데...")) / 2, 23);
-	printf("어쩔 수 없이 교수님의 설득에 대학원에 진학하게 되는데...");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("대학원도 과연 무사히 졸업할 수 있을까?")) / 2, 25);
-	printf("대학원도 과연 무사히 졸업할 수 있을까?");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("미처 알지 못했던 진짜 \"캠퍼스 라이프\"가 지금부터 시작됩니다! ")) / 2, 27);
-	printf("미처 알지 못했던 진짜 \"캠퍼스 라이프\"가 지금부터 시작됩니다!");
-	Sleep(1000);
-	
-	gotoxy((HOR - strlen("< press Enter to Start Game >")) / 2, 30);
-	printf("< press Enter to Start Game >");
-	
-	gotoxy(HOR/2, 33);
-	ch = _getch();
-	
+		gotoxy((HOR - strlen("COVID-19가 슬슬 끝나갈 때쯤 \"진짜\"인줄 알았던 대학 생활을 즐기며 평화로운 나날을 보내고 있었는데...이때까지만 해도 몰랐다.")) / 2, 15);
+		printf("COVID-19가 슬슬 끝나갈 때쯤 \"진짜\"인줄 알았던 대학 생활을 즐기며 평화로운 나날을 보내고 있었는데...이때까지만 해도 몰랐다.");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("지겨운 술 냄새와, 완화상평의 혜택이 무너지고, 슬슬 취업이 우리에게 다가오고 있다는 것을...!")) / 2, 17);
+		printf("지겨운 술 냄새와, 완화상평의 혜택이 무너지고, 슬슬 취업이 우리에게 다가오고 있다는 것을...!");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("과연 우리는 졸업을 무사히 8학기만으로 끝낼 수 있을까?")) / 2, 19);
+		printf("과연 우리는 졸업을 무사히 8학기만으로 끝낼 수 있을까?");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("그리고, 너무 무리한 나머지 교수님의 눈에 들어와버린 나...!")) / 2, 21);
+		printf("그리고, 너무 무리한 나머지 교수님의 눈에 들어와버린 나...!");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("어쩔 수 없이 교수님의 설득에 대학원에 진학하게 되는데...")) / 2, 23);
+		printf("어쩔 수 없이 교수님의 설득에 대학원에 진학하게 되는데...");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("대학원도 과연 무사히 졸업할 수 있을까?")) / 2, 25);
+		printf("대학원도 과연 무사히 졸업할 수 있을까?");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("미처 알지 못했던 진짜 \"캠퍼스 라이프\"가 지금부터 시작됩니다! ")) / 2, 27);
+		printf("미처 알지 못했던 진짜 \"캠퍼스 라이프\"가 지금부터 시작됩니다!");
+		Sleep(1000);
+		
+		gotoxy((HOR - strlen("< press Enter to Start Game >")) / 2, 30);
+		printf("< press Enter to Start Game >");
+		
+		gotoxy(HOR/2, 33);
+		ch = _getch();
+	}
 	// 메뉴 시작
 	while (game_start) {
 		// 메뉴 및 ** 출력하는 화면 결정하는 부분 - 0610 수정
@@ -388,7 +402,7 @@ int main(void) {
 			else
 				ranking[level-1] = 2;
 			// 한 번에 10학기 넘으면 게임오버시킴
-			if(ranking[level-1] > 10){
+			if(ranking[level-1] > semester_limit){
 				// 게임 오버
 				player_select_1 = 8;
 				continue;

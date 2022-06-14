@@ -366,7 +366,7 @@ int main(void) {
 				// 남은 시간 및 초과 시간 출력
 				gotoxy(166, 4);
 				
-				if(time(NULL) - tm1 < time_limit[level-1]){
+				if(time(NULL) - tm1 <= time_limit[level-1]){
 					printf("남은 시간 : ");
 					printf("%3d", time_limit[level-1] - (time(NULL) - tm1));
 				}

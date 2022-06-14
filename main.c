@@ -47,14 +47,14 @@ const int first_line = 13;			// 화면 안내문 출력하는 첫째줄
 int line = 24;
 
 time_t tm1, tm2; 					// 게임 시간 받는 변수
-const int time_limit[3] = {4, 5, 6};
+const int time_limit[3] = {40, 50, 60};
 int level = 1;						// 난이도 - 1 (초급), 2 (중급), 3 (고급)
 int ch = -1;	// 사용자 움직임, 입력 주로 받는 변수
 int user = -1;
 int user_movable = 0;	// 사용자 움직임 제어하는 변수
 const int event_length = 10;
 int event_endtime[10] = {0, };
-int player_select_1, player_select_2;	// 각각 menu 선택이랑 게임 설명 부분 담당.
+int player_select_1 = 0, player_select_2 = 0;	// 각각 menu 선택이랑 게임 설명 부분 담당.
 int player_shape = 0; 				// 사용자 모양 바꿔주는 변수, 0~5
 int professor_location[20][2] = { 0 };	// 교수님 위치 저장하는 배열, 인원 크기보다 적을 시 나머지 공간엔 0 할당. 10 / 15 / 20명.
 int ranking[6] = { 0 }; 			// ranking[0] = 학사 취득 학기 저장, ranking[1] = 석사 취득 학기 저장, ranking[2] = 박사 취득 학기 저장, 
@@ -69,8 +69,8 @@ int main(void) {
 	int x = 40, y = 12;				// 플레이어 위치 저장하는 변수
 	int game_start = 1;				// 메뉴부터 시작해서 전체 while문 반복 조절하는 변수
 	int minigame_result=0;			// 미니게임 결과 반환값 저장해주는 변수
-	int player_select_1 = 0; 		// **중요 메뉴, 게임시작, 미니게임 시작 등 while문 안에서 상태 저장하는 변수
-	int player_select_2 = 0;		// 게임 설명 부분 사용자 선택.
+	// int player_select_1 = 0; 		// **중요 메뉴, 게임시작, 미니게임 시작 등 while문 안에서 상태 저장하는 변수
+	// int player_select_2 = 0;		// 게임 설명 부분 사용자 선택.
 	char letter;					// ch -> int형, letter -> char형 입력 처리
 	char text[CHAR_LENGTH];		// 문장 출력할때 임시저장하는 변수
 	
@@ -303,13 +303,14 @@ int main(void) {
 			gotoxy(0, 15);
 			menu(2);
 			// 시간초과 -> 학위 취득 실패 메세지
-			printText_mid("시간초과로 학위 취득에 실패하셨습니다...", 28);
+			printText_mid("논문을 완성했지만 시간초과로 학위 취득에 실패하셨습니다...", 28);
 			printText_mid("Enter - 다시 시작하기", 30);
 			ch = _getch();
 			// 초기화
 			player_select_1 = 0;
-			level = 0;
-			for(int i = 0; i < 4; i++)
+			letter = 'a';
+			// level = 1;
+			for(int i = 0; i < 6; i++)
 				ranking[i] = 0;
 			
 			break;

@@ -1,4 +1,5 @@
 ﻿//main 함수
+// Copyright 2022. 송현준, 한성준, 차민우, 조성호, 정하린 all rights reserved.
 #include "header.h"
 #define CHAR_LENGTH 1000
 #define BOX_HALF_12 12

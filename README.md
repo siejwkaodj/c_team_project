@@ -47,3 +47,9 @@
 
 ## move.c -> int main()
 - 위에 있는 flag(), printMap()등을 다 합쳐서 출력된 맵 위에서 사용자가 움직일 수 있게 함.
+
+
+# 참고 자료
+- 멀티쓰레드 : 
+- https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=ratmsma&logNo=40023762818
+- https://velog.io/@ruthetum/C-Multi-Thread-%EA%B5%AC%ED%98%84-1

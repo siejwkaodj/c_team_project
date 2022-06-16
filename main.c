@@ -392,10 +392,19 @@ int main(void) {
 			// 게임 종료시 부분(whlie문 끝) + 0609 난이도 별로 시간에 따른 학기 수 & 일정 시간을 넘기면 학위 취득 실패 출력 후 메인메뉴로 돌아가야 함.
 			// 메인게임에서 취득한 학기 저장.
 			tm2 = time(NULL);
-			if(tm2 - tm1 > time_limit[level-1])
-				ranking[level-1] = 2 + (tm2 - tm1 - time_limit[level-1]) / 10;
-			else
-				ranking[level-1] = 2;
+			if(level == 1){
+				if(tm2 - tm1 > time_limit[level-1])
+					ranking[level-1] = 8 + (tm2 - tm1 - time_limit[level-1]) / 10;
+				else
+					ranking[level-1] = 8;
+			}
+			else{
+				if(tm2 - tm1 > time_limit[level-1])
+					ranking[level-1] = 4 + (tm2 - tm1 - time_limit[level-1]) / 10;
+				else
+					ranking[level-1] = 4;
+			}
+			
 			// 한 번에 10학기 넘으면 게임오버시킴
 			if(ranking[level-1] > semester_limit){
 				// 게임 오버

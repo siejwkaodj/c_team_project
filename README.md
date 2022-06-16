@@ -5,10 +5,13 @@
 조성호
 정하린
 
+# 게임 하는 법
+1. 파일들을 다운받는다(기타c파일들 폴더에 있는 파일들은 사용할 필요 x).
+2. visual studio에서 빈 프로젝트를 만들고, "헤더파일" 칸에 header.h 파일을, "소스파일"칸에 나머지 c파일들을 넣어준다.
+3. '디버깅하지 않고 실행' 또는 '디버깅'을 눌러 파일을 실행한다.
+
 # 게임 이름
-1) 
-2)
-3)
+대학원 탈출
 
 # 게임 설명
 난이도 
@@ -44,3 +47,9 @@
 
 ## move.c -> int main()
 - 위에 있는 flag(), printMap()등을 다 합쳐서 출력된 맵 위에서 사용자가 움직일 수 있게 함.
+
+
+# 참고 자료
+- 멀티쓰레드 : 
+- https://m.blog.naver.com/PostView.naver?isHttpsRedirect=true&blogId=ratmsma&logNo=40023762818
+- https://velog.io/@ruthetum/C-Multi-Thread-%EA%B5%AC%ED%98%84-1

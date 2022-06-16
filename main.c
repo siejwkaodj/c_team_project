@@ -377,20 +377,14 @@ int main(void) {
 				}	
 
 				// 다음 방향 이동 부분
-				// ch = _getch();
-				// Sleep(10);
-				
 				if(user_movable){
 					gotoxy(x, y);
 					printf("  \b\b");			// 이동 시 주인공 문자 지우는 부분
 					main_game_running = move(&x, &y, user);	// x, y, ch 받아 사용자 위치 움직이는 부분
 					user_movable--;
 				}
-				// 이벤트 실행 부분
-
+				// 이벤트 실행 확인 부분
 				event_check();
-				// Sleep(67);
-				// printBlank(0, 0, 0, 180);
 			}
 		}
 		// 메인게임 종료 및 미니게임 시작

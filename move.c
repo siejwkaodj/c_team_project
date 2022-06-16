@@ -34,15 +34,6 @@ int move(int *x, int *y, int ch){
         case 0:
             *x = tx;
             *y = ty;
-            // // 방향 반대로 설정
-            // if(event_endtime[6]){
-            //     *x = 2 * (*x) - tx;
-            //     *y = 2 * (*y) - ty;
-            // }
-            // else{
-            //     *x = tx;
-            //     *y = ty;
-            // }
             break;
         // 장애물, 칸 범위 넘어가도 장애물 판정.
         case 2:
@@ -54,14 +45,6 @@ int move(int *x, int *y, int ch){
             map[ty - min_y][tx / 2 - 1] = 0;    // 맵 이부분 초기화 해줘야함.
             *x = tx;
             *y = ty;
-            // if(event_endtime[6]){
-            //     *x = 2 * (*x) - tx;
-            //     *y = 2 * (*y) - ty;
-            // }
-            // else{
-            //     *x = tx;
-            //     *y = ty;
-            // }
             professor();
             break;
         // 깃발
@@ -69,14 +52,6 @@ int move(int *x, int *y, int ch){
             map[ty - min_y][tx / 2 - 1] = 0;
             *x = tx;
             *y = ty;
-            // if(event_endtime[6]){
-            //     *x = 2 * (*x) - tx;
-            //     *y = 2 * (*y) - ty;
-            // }
-            // else{
-            //     *x = tx;
-            //     *y = ty;
-            // }
             flag_effect();
             break;
         // 보물
@@ -112,9 +87,7 @@ int move(int *x, int *y, int ch){
                 sprintf(text, "Ending in %d...", 3-i);
                 printf("%s", text);
                 Sleep(1*1000);
-
                 //printText("                    ", 107, first_line+1);
-                
             }
             
             return 0;
